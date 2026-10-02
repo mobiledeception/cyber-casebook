@@ -1,0 +1,593 @@
+[
+ {
+  "date": "2026-10-01",
+  "category": "Cybersecurity",
+  "headline": "Shut Down, Then Patch",
+  "synopsis": "A maximum-severity flaw in Kiteworks' email gateway could let attackers take full control, days after the company told customers to go offline.",
+  "keyTerms": [
+   "Code injection",
+   "Path traversal",
+   "Root access",
+   "Risk avoidance"
+  ],
+  "apCyber": [
+   "2.1.E.2",
+   "4.3.C.2",
+   "4.1.C.1"
+  ],
+  "apNet": [
+   "4.1.B.1",
+   "4.6.B.4"
+  ],
+  "outlet": "BleepingComputer",
+  "sourceUrl": "https://www.bleepingcomputer.com/news/security/kiteworks-patches-max-severity-email-protection-gateway-code-injection-vulnerability/",
+  "pdfView": "",
+  "pdfDownload": ""
+ },
+ {
+  "date": "2026-10-01",
+  "category": "Cybersecurity",
+  "headline": "Cash on Command",
+  "synopsis": "Crews broke into ATMs across the U.S. and planted malware that made them spit out cash. Now the U.S. Treasury has sanctioned the network behind it.",
+  "keyTerms": [
+   "Jackpotting",
+   "Malware",
+   "Physical access",
+   "Sanctions"
+  ],
+  "apCyber": [
+   "2.2.B.5",
+   "2.4.A.1",
+   "4.1.A.4"
+  ],
+  "apNet": [
+   "4.5.A.2",
+   "4.5.B.3",
+   "4.6.B.2"
+  ],
+  "outlet": "SecurityWeek",
+  "sourceUrl": "https://www.securityweek.com/treasury-blacklists-most-wanted-atm-malware-developer-and-his-network/",
+  "pdfView": "https://drive.google.com/file/d/1p23br-j55qxId3VbvGCAN7TdiukLafMw/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1p23br-j55qxId3VbvGCAN7TdiukLafMw"
+ },
+ {
+  "date": "2026-10-01",
+  "category": "AI",
+  "headline": "The Snake That Never Was",
+  "synopsis": "A man used an AI-made photo to report a deadly viper loose in a California neighborhood, and police sent a public alert before learning it was fake.",
+  "keyTerms": [
+   "AI-generated",
+   "AI detector",
+   "Hoax",
+   "Verification"
+  ],
+  "apCyber": [
+   "1.4.B.4",
+   "2.1.D.3",
+   "2.1.A.2"
+  ],
+  "apNet": [
+   "1.1.A.7",
+   "3.2.D.3",
+   "4.1.A.4"
+  ],
+  "outlet": "NBC Los Angeles",
+  "sourceUrl": "https://www.nbclosangeles.com/news/local/santa-ana-pd-ai-generated-viper-hoax/3949529/",
+  "pdfView": "https://drive.google.com/file/d/1wlKCsR9-QJTKZHHjO81fA_Pm9cM8aLJb/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1wlKCsR9-QJTKZHHjO81fA_Pm9cM8aLJb"
+ },
+ {
+  "date": "2026-10-01",
+  "category": "Cybersecurity",
+  "headline": "The Fake Zoom Trap",
+  "synopsis": "A fake Zoom installer for Macs talked users into switching off a built-in safety check, then quietly planted a backdoor for attackers.",
+  "keyTerms": [
+   "Backdoor",
+   "Gatekeeper",
+   "Fake installer",
+   "C2 server"
+  ],
+  "apCyber": [
+   "1.1.A.1",
+   "4.3.A.3",
+   "4.1.C.7"
+  ],
+  "apNet": [
+   "1.3.A.4",
+   "1.3.B.5",
+   "4.5.C.3"
+  ],
+  "outlet": "Infosecurity Magazine",
+  "sourceUrl": "https://www.infosecurity-magazine.com/news/cloudsyncd-macos-backdoor-fake/",
+  "pdfView": "https://drive.google.com/file/d/1gZ78FnVhPJL5lS8fmMt7VNDa_s8iSmVh/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1gZ78FnVhPJL5lS8fmMt7VNDa_s8iSmVh"
+ },
+ {
+  "date": "2026-10-01",
+  "category": "Cybersecurity",
+  "headline": "Nine Days to Lockdown",
+  "synopsis": "Attackers broke in through unpatched SharePoint servers and, in one case, went from first foothold to locked computers in just nine days.",
+  "keyTerms": [
+   "Ransomware",
+   "Unpatched",
+   "Admin rights",
+   "Segmentation"
+  ],
+  "apCyber": [
+   "4.3.C.2",
+   "2.1.C.5",
+   "2.1.C.6"
+  ],
+  "apNet": [
+   "4.5.A.3",
+   "3.4.B.5",
+   "4.6.B.4"
+  ],
+  "outlet": "Dark Reading",
+  "sourceUrl": "https://www.darkreading.com/cyberattacks-data-breaches/warlock-ransomware-spanish-portuguese",
+  "pdfView": "https://drive.google.com/file/d/1tnff0_K9vV-YdlJDHx_fOScopkqXiD_P/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1tnff0_K9vV-YdlJDHx_fOScopkqXiD_P"
+ },
+ {
+  "date": "2026-10-01",
+  "category": "AI",
+  "headline": "The Copycat Campaign",
+  "synopsis": "OpenAI says users tied to China's Moonshot AI sent crafted requests to pull hidden reasoning from its models, which could help train a rival.",
+  "keyTerms": [
+   "Distillation",
+   "Model reasoning",
+   "Account ban",
+   "Threat sharing"
+  ],
+  "apCyber": [
+   "1.4.A.3",
+   "5.6.A.1",
+   "3.5.B.2"
+  ],
+  "apNet": [
+   "4.1.A.3",
+   "4.5.B.4",
+   "4.5.C.3"
+  ],
+  "outlet": "OpenAI",
+  "sourceUrl": "https://openai.com/index/disrupting-a-coordinated-model-distillation-campaign/",
+  "pdfView": "https://drive.google.com/file/d/1bqtpKBaVaknuZeg9FvzLthAOTaQ4Se5G/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1bqtpKBaVaknuZeg9FvzLthAOTaQ4Se5G"
+ },
+ {
+  "date": "2026-10-01",
+  "category": "Cybersecurity",
+  "headline": "The Invoice Breach",
+  "synopsis": "A flaw in Poland's popular Fakturownia invoicing service let an attacker reach company records, password hashes, bank details, and access tokens.",
+  "keyTerms": [
+   "Password hash",
+   "API token",
+   "Invoice fraud",
+   "Key rotation"
+  ],
+  "apCyber": [
+   "4.2.A.5",
+   "5.1.C.2",
+   "5.2.A.3"
+  ],
+  "apNet": [
+   "1.4.B.4",
+   "1.3.A.2",
+   "4.1.A.3"
+  ],
+  "outlet": "The Record",
+  "sourceUrl": "https://therecord.media/poland-cyberattack-invoice-software",
+  "pdfView": "https://drive.google.com/file/d/1rI5xLCWWF6mIRAYXzTtG6-obuiv4cLVm/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1rI5xLCWWF6mIRAYXzTtG6-obuiv4cLVm"
+ },
+ {
+  "date": "2026-10-01",
+  "category": "AI",
+  "headline": "Fake GPT, Real Trap",
+  "synopsis": "Scammers built fake helpers inside ChatGPT that sent users to a bogus check page and tricked them into installing spying software.",
+  "keyTerms": [
+   "Custom GPT",
+   "ClickFix",
+   "RAT",
+   "DNS over HTTPS"
+  ],
+  "apCyber": [
+   "1.1.A.1",
+   "1.1.C.3",
+   "1.4.B.4"
+  ],
+  "apNet": [
+   "1.4.B.1",
+   "4.5.C.2",
+   "1.3.A.4"
+  ],
+  "outlet": "Dark Reading",
+  "sourceUrl": "https://www.darkreading.com/cyberattacks-data-breaches/malicious-custom-gpts-chatgpt-rat-delivery-lure",
+  "pdfView": "https://drive.google.com/file/d/1gbey6WzTM0BctOclf_INAWPROkfgpY0U/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1gbey6WzTM0BctOclf_INAWPROkfgpY0U"
+ },
+ {
+  "date": "2026-10-01",
+  "category": "Cybersecurity",
+  "headline": "Nine Months Undetected",
+  "synopsis": "Hackers used a flaw in a Pentagon file-sharing system to reach the personal records of more than 3 million people, and nobody noticed for nine months.",
+  "keyTerms": [
+   "PII",
+   "Vulnerability",
+   "Dwell time",
+   "Identity theft"
+  ],
+  "apCyber": [
+   "4.3.C.2",
+   "5.2.A.3",
+   "5.6.A.1"
+  ],
+  "apNet": [
+   "4.1.A.3",
+   "4.6.B.2",
+   "1.3.A.2"
+  ],
+  "outlet": "BleepingComputer",
+  "sourceUrl": "https://www.bleepingcomputer.com/news/security/hackers-breach-pentagon-human-resources-management-system-steal-data-of-nearly-3-million-people/",
+  "pdfView": "https://drive.google.com/file/d/1Dc4Cw0ial2JBa_L0cjrPl75-pQej12b8/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1Dc4Cw0ial2JBa_L0cjrPl75-pQej12b8"
+ },
+ {
+  "date": "2026-10-01",
+  "category": "AI",
+  "headline": "The Permission Puzzle",
+  "synopsis": "Days after Meta launched its Muse AI agent, a columnist said it read his private texts without permission. Meta says that is impossible.",
+  "keyTerms": [
+   "AI agent",
+   "Permission",
+   "Opt-in",
+   "Least privilege"
+  ],
+  "apCyber": [
+   "5.2.C.7",
+   "1.4.B.3",
+   "5.2.C.1"
+  ],
+  "apNet": [
+   "1.4.B.6",
+   "4.5.B.4",
+   "4.1.A.3"
+  ],
+  "outlet": "TechCrunch",
+  "sourceUrl": "https://techcrunch.com/2026/09/30/meta-disputes-claim-that-muse-read-a-users-private-messages-without-permission/",
+  "pdfView": "https://drive.google.com/file/d/1K_kI7AZymN83uaEWA6gDrTuDHavk7dYW/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1K_kI7AZymN83uaEWA6gDrTuDHavk7dYW"
+ },
+ {
+  "date": "2026-10-01",
+  "category": "Cybersecurity",
+  "headline": "Mail Server Under Siege",
+  "synopsis": "Attackers broke into Zimbra email servers through a flaw that was quietly patched in July, before most admins knew it needed fixing.",
+  "keyTerms": [
+   "Web shell",
+   "Sanitizing",
+   "Disclosure",
+   "Root access"
+  ],
+  "apCyber": [
+   "5.5.B.2",
+   "4.3.C.2",
+   "2.1.C.4"
+  ],
+  "apNet": [
+   "4.6.B.4",
+   "4.5.C.3",
+   "4.5.B.4"
+  ],
+  "outlet": "SecurityWeek",
+  "sourceUrl": "https://www.securityweek.com/zimbra-vulnerability-exploited-in-the-wild-prior-to-public-disclosure/",
+  "pdfView": "https://drive.google.com/file/d/1OP5suFdpRDbphMabXVl_AM2RN_uk9yoJ/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1OP5suFdpRDbphMabXVl_AM2RN_uk9yoJ"
+ },
+ {
+  "date": "2026-10-01",
+  "category": "AI",
+  "headline": "The Prompt That Leaked",
+  "synopsis": "A worker asked an AI tool to write code for a marketing email but never said to hide addresses, so customers could see each other's emails.",
+  "keyTerms": [
+   "Generative AI",
+   "Data breach",
+   "Code review",
+   "Prompt"
+  ],
+  "apCyber": [
+   "1.4.B.4",
+   "5.1.C.1",
+   "1.5.A.2"
+  ],
+  "apNet": [
+   "2.4.A.2",
+   "4.5.A.1",
+   "4.5.B.2"
+  ],
+  "outlet": "AsiaOne",
+  "sourceUrl": "https://www.asiaone.com/singapore/bee-cheng-hiang-customers-email-addresses-exposed-ai-generated-code-breach",
+  "pdfView": "https://drive.google.com/file/d/1QyH3TEZQdX9SBaSPPWAklJq2OalWUOv2/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1QyH3TEZQdX9SBaSPPWAklJq2OalWUOv2"
+ },
+ {
+  "date": "2026-10-01",
+  "category": "Cybersecurity",
+  "headline": "Keys Left in the Open",
+  "synopsis": "Researchers found more than half a million passwords and keys sitting in public GitHub code, and most had never been cancelled by their owners.",
+  "keyTerms": [
+   "API key",
+   "Repository",
+   "Push Protection",
+   "Revocation"
+  ],
+  "apCyber": [
+   "5.5.A.3",
+   "5.1.C.1",
+   "5.4.A.3"
+  ],
+  "apNet": [
+   "4.5.A.1",
+   "1.3.A.2",
+   "4.5.B.2"
+  ],
+  "outlet": "BleepingComputer",
+  "sourceUrl": "https://www.bleepingcomputer.com/news/security/over-543-000-valid-credentials-exposed-in-public-github-repositories/",
+  "pdfView": "https://drive.google.com/file/d/1EsqOqLu9AoOrHq5NUPtY5jRHXaLSWBbl/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1EsqOqLu9AoOrHq5NUPtY5jRHXaLSWBbl"
+ },
+ {
+  "date": "2026-09-30",
+  "category": "AI",
+  "headline": "The Bots Get Locked Out",
+  "synopsis": "Reddit is shutting its RSS feeds and public API, blaming AI bots that scrape posts at huge scale, and pushing developers toward approved access.",
+  "keyTerms": [
+   "Web scraping",
+   "API",
+   "RSS feed",
+   "Data licensing"
+  ],
+  "apCyber": [
+   "1.4.A.5",
+   "5.2.A.3"
+  ],
+  "apNet": [
+   "4.2.A.1",
+   "4.5.B.2"
+  ],
+  "outlet": "TechCrunch",
+  "sourceUrl": "https://techcrunch.com/2026/09/30/reddit-is-killing-rss-feeds-ending-public-api-access-because-of-ai-bots/",
+  "pdfView": "https://drive.google.com/file/d/1Qngs2jRAzTXg8I0d79vNJNhhM9Xx1Qju/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1Qngs2jRAzTXg8I0d79vNJNhhM9Xx1Qju"
+ },
+ {
+  "date": "2026-09-30",
+  "category": "Cybersecurity",
+  "headline": "Spy in the Pocket",
+  "synopsis": "Ukraine warns that Russia-linked hackers are hijacking soldiers' and officials' phones through infected websites, stealing messages in minutes.",
+  "keyTerms": [
+   "Exploit kit",
+   "Watering hole",
+   "Espionage",
+   "Spyware"
+  ],
+  "apCyber": [
+   "4.1.B.1",
+   "2.1.C.7",
+   "4.1.C.1"
+  ],
+  "apNet": [
+   "1.3.A.4",
+   "1.4.B.3",
+   "4.1.A.3"
+  ],
+  "outlet": "The Record",
+  "sourceUrl": "https://therecord.media/ukraine-ssscip-mobile-malware-warning-ios-android",
+  "pdfView": "https://drive.google.com/file/d/1oab71OQYjm0L5AVd_iqgGeHYn3rLjZ3E/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1oab71OQYjm0L5AVd_iqgGeHYn3rLjZ3E"
+ },
+ {
+  "date": "2026-09-30",
+  "category": "AI",
+  "headline": "Hacked by an AI Agent",
+  "synopsis": "An autonomous AI agent chained two unknown flaws in a help-desk tool to break into a volunteer security group's network, reaching root in seconds.",
+  "keyTerms": [
+   "AI agent",
+   "Zero-day",
+   "Root access",
+   "Segmentation"
+  ],
+  "apCyber": [
+   "1.4.A.6",
+   "3.3.B.2",
+   "2.1.C.5"
+  ],
+  "apNet": [
+   "2.6.A.4",
+   "3.4.A.5",
+   "4.5.A.3"
+  ],
+  "outlet": "BleepingComputer",
+  "sourceUrl": "https://www.bleepingcomputer.com/news/security/divd-says-zammad-zero-days-enabled-ai-driven-network-breach/",
+  "pdfView": "https://drive.google.com/file/d/1Qb082VRdj5KvsRj24eCRHD91tTxA5RCw/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1Qb082VRdj5KvsRj24eCRHD91tTxA5RCw"
+ },
+ {
+  "date": "2026-09-30",
+  "category": "Cybersecurity",
+  "headline": "The $387M Heist",
+  "synopsis": "Hackers slipped into crypto exchange Bitget through flaws in two of its own security devices, then drained $387.5 million in about three hours.",
+  "keyTerms": [
+   "Zero-day",
+   "Hot wallet",
+   "Web shell",
+   "Bounty"
+  ],
+  "apCyber": [
+   "4.1.C.1",
+   "2.1.C.4",
+   "2.1.C.6"
+  ],
+  "apNet": [
+   "4.5.A.3",
+   "2.5.A.3",
+   "4.6.B.2"
+  ],
+  "outlet": "BleepingComputer",
+  "sourceUrl": "https://www.bleepingcomputer.com/news/security/bitget-hacked-via-zero-day-in-third-party-security-products/",
+  "pdfView": "https://drive.google.com/file/d/1VCE635qvP8V5npY-5EqF6onkMvqvO413/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1VCE635qvP8V5npY-5EqF6onkMvqvO413"
+ },
+ {
+  "date": "2026-09-30",
+  "category": "AI",
+  "headline": "The Voice on Trial",
+  "synopsis": "A Tokyo court ruled for the first time that a person's voice is protected from AI copies used to make money, even as it dismissed the actor's case.",
+  "keyTerms": [
+   "Voice clone",
+   "Publicity right",
+   "Deepfake",
+   "Precedent"
+  ],
+  "apCyber": [
+   "1.4.A.1",
+   "1.4.B.1"
+  ],
+  "apNet": [
+   "1.3.A.2"
+  ],
+  "outlet": "The Next Web",
+  "sourceUrl": "https://thenextweb.com/news/tokyo-court-ai-voice-clone-kenjiro-tsuda-tiktok",
+  "pdfView": "https://drive.google.com/file/d/1O3J-EV30nt-5X8bPJ_93BqzRPZXu0xnW/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1O3J-EV30nt-5X8bPJ_93BqzRPZXu0xnW"
+ },
+ {
+  "date": "2026-09-30",
+  "category": "Cybersecurity",
+  "headline": "The Network Master Key",
+  "synopsis": "A critical flaw in Cisco's network control software let attackers act as the top administrator without entering a password, and some already did.",
+  "keyTerms": [
+   "Authentication",
+   "Vulnerability",
+   "Admin",
+   "CVSS score"
+  ],
+  "apCyber": [
+   "4.1.C.1",
+   "4.3.C.2",
+   "4.2.C.1"
+  ],
+  "apNet": [
+   "2.5.A.2",
+   "4.5.A.3",
+   "1.4.B.3"
+  ],
+  "outlet": "The Hacker News",
+  "sourceUrl": "https://thehackernews.com/2026/09/cisco-warns-of-attackers-exploiting.html",
+  "pdfView": "https://drive.google.com/file/d/1BCiTlQA_xb6Azv75OudZzPdER9KCTedT/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1BCiTlQA_xb6Azv75OudZzPdER9KCTedT"
+ },
+ {
+  "date": "2026-09-30",
+  "category": "AI",
+  "headline": "AI Agents Overshared",
+  "synopsis": "Coding assistants trying to share screenshots quietly posted thousands of private company images to public GitHub pages, including billing records.",
+  "keyTerms": [
+   "AI agent",
+   "Repository",
+   "Data exposure",
+   "Default"
+  ],
+  "apCyber": [
+   "5.5.A.3",
+   "5.2.A.3",
+   "5.2.C.7"
+  ],
+  "apNet": [
+   "4.5.A.1",
+   "4.5.B.2",
+   "4.1.A.3"
+  ],
+  "outlet": "The Hacker News",
+  "sourceUrl": "https://thehackernews.com/2026/09/ai-coding-agents-exposed-13000-internal.html",
+  "pdfView": "https://drive.google.com/file/d/15-mejEwmpPp8egAzaGkfcfdG1K2FumeS/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=15-mejEwmpPp8egAzaGkfcfdG1K2FumeS"
+ },
+ {
+  "date": "2026-09-30",
+  "category": "Cybersecurity",
+  "headline": "Fake Invitations",
+  "synopsis": "Russian state hackers posed as officials and think tanks, using fake messages to slip spy software onto computers of groups that support Ukraine.",
+  "keyTerms": [
+   "Phishing",
+   "Backdoor",
+   "Persistence",
+   "APT"
+  ],
+  "apCyber": [
+   "2.1.A.2",
+   "2.1.A.3",
+   "2.1.C.4"
+  ],
+  "apNet": [
+   "1.4.B.1",
+   "1.3.A.4"
+  ],
+  "outlet": "SecurityWeek",
+  "sourceUrl": "https://www.securityweek.com/russian-apt-star-blizzard-uses-redflick-infection-chain-in-recent-attacks/",
+  "pdfView": "https://drive.google.com/file/d/1LG7HNx0afYBKDRRKXeSx987hZ4MgF5G1/view",
+  "pdfDownload": "https://drive.google.com/uc?export=download&id=1LG7HNx0afYBKDRRKXeSx987hZ4MgF5G1"
+ },
+ {
+  "date": "2026-09-30",
+  "category": "AI",
+  "headline": "The AI Bug Boom",
+  "synopsis": "Google says AI is helping people find, and exploit, software flaws faster than ever, and the bugs it uncovers tend to be the more dangerous kind.",
+  "keyTerms": [
+   "Vulnerability",
+   "Exploit",
+   "RCE",
+   "Patch"
+  ],
+  "apCyber": [
+   "1.4.A.6",
+   "4.1.C.1",
+   "4.3.C.2"
+  ],
+  "apNet": [
+   "1.4.B.3",
+   "4.6.B.4",
+   "2.5.A.3"
+  ],
+  "outlet": "SecurityWeek",
+  "sourceUrl": "https://www.securityweek.com/google-ai-is-changing-the-pace-and-profile-of-vulnerability-discovery/",
+  "pdfView": "",
+  "pdfDownload": ""
+ },
+ {
+  "date": "2026-09-30",
+  "category": "AI",
+  "headline": "Rogue AI in Court",
+  "synopsis": "A safety group is suing OpenAI after AI agents in a security test broke into real systems they were never cleared to touch.",
+  "keyTerms": [
+   "AI agent",
+   "Injunction",
+   "Sandbox",
+   "Liability"
+  ],
+  "apCyber": [
+   "1.4.A.6",
+   "2.1.C.1",
+   "5.2.C.7"
+  ],
+  "apNet": [
+   "4.5.A.1",
+   "4.5.B.2",
+   "2.6.A.4"
+  ],
+  "outlet": "SecurityWeek",
+  "sourceUrl": "https://www.securityweek.com/anthropic-flags-ai-agent-liability-risks-as-openai-faces-hacking-lawsuit/",
+  "pdfView": "",
+  "pdfDownload": ""
+ }
+]

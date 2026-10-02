@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Cyber Casebook</title>
+<meta name="description" content="Real-world Cybersecurity, Networking, and AI case studies for grades 9-12, aligned to AP Cybersecurity and AP Networking essential knowledge.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+__HEAD__
+</head>
+<body>
+<canvas id="rain" aria-hidden="true"></canvas>
+<a class="sr" href="#finder">Skip to search</a>
+<div class="wrap">
+  <header class="top">
+    <img class="banner" id="banner" data-asset="banner" src="img/banner.jpg" alt="The Cyber Casebook: real-world Cybersecurity, Networking and AI case studies for grades 9-12, aligned to AP Cybersecurity and AP Networking" width="1200" height="600">
+    <nav class="nav" aria-label="Sections">
+      <a href="#latest">Latest</a><a href="#ek">Browse by Essential Knowledge</a><a href="#finder">Search all cases</a>
+    </nav>
+  </header>
+
+  <main id="home">
+  <section class="sec" id="latest" aria-labelledby="latest-h">
+    <div class="sechead"><img data-asset="latest" style="--c:.438;--x:.056;--t:23px" src="img/latest.jpg" alt="" width="1200" height="600"></div>
+    <h2 id="latest-h" class="sr">Latest case studies</h2>
+    <div class="featured" id="featured">__FEATURED__</div>
+  </section>
+  <!--AD:home-->
+
+  <section class="sec" id="ek" aria-labelledby="ek-h">
+    <div class="sechead"><img data-asset="ek" style="--c:.450;--x:.052;--t:19px" src="img/ek.jpg" alt="" width="1200" height="600"></div>
+    <h2 id="ek-h" class="sr">Browse by Essential Knowledge</h2>
+    <div class="ekgrid">
+      <div class="ekpanel cyber">
+        <h3>AP Cybersecurity</h3>
+        <div class="sub">Essential knowledge statements used in these cases</div>
+        <label class="sr" for="findCyber">Find an AP Cybersecurity EK</label>
+        <input class="ekfind" id="findCyber" type="search" placeholder="Find an EK number or word…">
+        <div class="eklist" id="listCyber"></div>
+        <div class="ekdesc" id="descCyber" aria-live="polite">Select an EK number to read the statement and add it to your search.</div>
+      </div>
+      <div class="ekpanel net">
+        <h3>AP Networking</h3>
+        <div class="sub">Essential knowledge statements used in these cases</div>
+        <label class="sr" for="findNet">Find an AP Networking EK</label>
+        <input class="ekfind" id="findNet" type="search" placeholder="Find an EK number or word…">
+        <div class="eklist" id="listNet"></div>
+        <div class="ekdesc" id="descNet" aria-live="polite">Select an EK number to read the statement and add it to your search.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="finder" aria-labelledby="finder-h">
+    <div class="sechead"><img data-asset="search" style="--c:.512;--x:.051;--t:21px" src="img/search.jpg" alt="" width="1200" height="600"></div>
+    <h2 id="finder-h" class="sr">Search the Casebook</h2>
+    <div class="searchpanel" id="searchForm" role="search">
+      <div class="sp-q">
+        <label class="f" for="q">Search</label>
+        <input id="q" type="search" placeholder="Headline, key term, outlet…" enterkeyhint="search">
+      </div>
+      <div>
+        <label class="f" id="catLab">Category</label>
+        <div class="seg" role="group" aria-labelledby="catLab">
+          <button type="button" data-cat="" aria-pressed="true">All</button>
+          <button type="button" data-cat="Cybersecurity" aria-pressed="false">Cyber</button>
+          <button type="button" data-cat="Networking" aria-pressed="false">Networking</button>
+          <button type="button" data-cat="AI" aria-pressed="false">AI</button>
+        </div>
+      </div>
+      <div>
+        <label class="f" for="term">Key term</label>
+        <select id="term"><option value="">Any key term</option></select>
+      </div>
+      <div>
+        <label class="f" for="from">From date</label>
+        <input id="from" type="date">
+      </div>
+      <div>
+        <label class="f" for="to">To date</label>
+        <input id="to" type="date">
+      </div>
+      <div>
+        <label class="f" for="sort">Sort by</label>
+        <select id="sort">
+          <option value="new">Newest first</option>
+          <option value="old">Oldest first</option>
+          <option value="az">Headline A–Z</option>
+          <option value="cat">Category</option>
+        </select>
+      </div>
+      <div class="sp-ek">
+        <label class="f">Essential knowledge</label>
+        <div class="active" id="ekSel"></div>
+      </div>
+      <div class="sp-actions">
+        <button class="btn" id="reset" type="button">Clear all</button>
+        <button class="btn primary big" id="go" type="button"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg> Search</button>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <main id="resultsPage" hidden aria-labelledby="res-h">
+    <section class="sec">
+      <button class="btn back" id="back" type="button"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> Back to home</button>
+      <div class="sechead" style="margin-top:18px"><img data-asset="results" style="--c:.49;--x:.042;--t:20px" src="img/results.jpg" alt="" width="1200" height="600"></div>
+      <h2 id="res-h" class="sr" tabindex="-1">Search results</h2>
+      <div class="res-tools"><label class="sr" for="sort2">Sort by</label><select id="sort2" class="sort2">
+          <option value="new">Newest first</option><option value="old">Oldest first</option><option value="az">Headline A–Z</option><option value="cat">Category</option>
+        </select></div>
+      <div class="resbar"><div class="active" id="active"></div></div>
+      <div class="results" id="results"></div>
+      <!--AD:results-->
+      <nav class="pager" id="pager" aria-label="Result pages">
+        <button type="button" id="prev" aria-label="Previous 10 cases"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <span class="pg" id="pg"></span>
+        <button type="button" id="next" aria-label="Next 10 cases"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+      </nav>
+      <div style="margin-top:22px;text-align:center"><button class="btn" id="back2" type="button"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> Back to home</button></div>
+    </section>
+  </main>
+
+  __FOOTER__
+</div>
+
+<script>
+/* ===== CONFIG ===== */
+const DATA_URL = __DATA_URL__;  // set "dataUrl" in config.json, then run: node generate.js
+const PAGE_SIZE = 10;
+/* ================== */
+
+const SNAPSHOT = __SNAPSHOT__;
+const EKMAP = __EKMAP__;
+const PAGES = __PAGES__;   // case page for each story (built by generate.js)
+const pageFor = c => PAGES[c.sourceUrl] || PAGES[c.date + '|' + c.headline] || '';
+const titleLink = c => pageFor(c) ? `<a href="${esc(pageFor(c))}">${esc(c.headline)}</a>` : esc(c.headline);
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ICON = {
+  dl:'<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg>',
+  ext:'<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>',
+  eye:'<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>'
+};
+
+// Full-resolution Canva images come from the live feed; the built-in copies show until they load.
+function applyAssets(assets){
+  document.querySelectorAll('img[data-asset]').forEach(img => {
+    const url = assets && assets[img.dataset.asset];
+    if (!url) return;
+    const hi = new Image(); hi.onload = () => { img.src = url; }; hi.src = url;
+  });
+}
+
+
+let CASES = [];
+const state = { q:'', cat:'', term:'', from:'', to:'', sort:'new', cyber:'', net:'', page:1 };
+
+/* ---------- helpers ---------- */
+const fmtDate = d => { const [y,m,day] = String(d).split('-').map(Number); if(!y) return d; return new Date(y, m-1, day).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); };
+const host = u => { try { return new URL(u).hostname.replace(/^www\./,''); } catch { return u; } };
+const ekCmp = (a,b) => { const pa=a.split('.'), pb=b.split('.'); for (let i=0;i<4;i++){ const x=pa[i]||'', y=pb[i]||''; const nx=+x, ny=+y; if(!isNaN(nx)&&!isNaN(ny)&&nx!==ny) return nx-ny; if(isNaN(nx)&&x!==y) return x<y?-1:1; } return 0; };
+const isAI = c => /^ai$/i.test(c.category);
+const catCls = c => isAI(c) ? 'ai' : /^network/i.test(c.category) ? 'nw' : '';
+const statement = (course, id) => (EKMAP.ek[course] || {})[id] || '';
+const loTitle = (course, id) => (EKMAP.lo[course] || {})[id.split('.').slice(0,3).join('.')] || '';
+
+function normalize(list){
+  return (list||[]).filter(c => c && c.headline).map((c, i) => ({ _i:i,
+    date:String(c.date||'').slice(0,10), category:c.category||'', headline:c.headline, synopsis:c.synopsis||'',
+    keyTerms:c.keyTerms||[], apCyber:c.apCyber||[], apNet:c.apNet||[], outlet:c.outlet||'', sourceUrl:c.sourceUrl||'',
+    pdfView:c.pdfView||'', pdfDownload:c.pdfDownload||''
+  }));
+}
+
+/* ---------- data loading ---------- */
+function jsonp(url){
+  return new Promise((res, rej) => {
+    const cb = 'ccf_' + Math.random().toString(36).slice(2);
+    const s = document.createElement('script');
+    const t = setTimeout(() => { cleanup(); rej(new Error('timeout')); }, 15000);
+    function cleanup(){ clearTimeout(t); delete window[cb]; s.remove(); }
+    window[cb] = d => { cleanup(); res(d); };
+    s.onerror = () => { cleanup(); rej(new Error('jsonp failed')); };
+    s.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cb;
+    document.head.appendChild(s);
+  });
+}
+async function load(){
+  let data = null;
+  if (DATA_URL) {
+    try { const r = await fetch(DATA_URL, { redirect:'follow' }); if (!r.ok) throw 0; data = await r.json(); }
+    catch { try { data = await jsonp(DATA_URL); } catch { data = null; } }
+  }
+  if (data && Array.isArray(data.cases)) {
+    CASES = normalize(data.cases);
+    applyAssets(data.assets);
+  } else {
+    CASES = normalize(SNAPSHOT);
+  }
+  CASES.sort((a,b) => b.date.localeCompare(a.date) || a._i - b._i);
+  const openResults = readHash();
+  buildTermOptions(); buildEkLists(); renderFeatured();
+  if (openResults) showResults(false); 
+}
+
+/* ---------- featured ---------- */
+function renderFeatured(){
+  const top = CASES.slice(0,2);
+  $('#featured').innerHTML = top.length ? top.map(c => `
+    <article class="fcard ${catCls(c)}">
+      <div class="meta"><span class="badge ${catCls(c)}">${esc(c.category||'Case')}</span><span>${esc(fmtDate(c.date))}</span><span>${esc(c.outlet)}</span></div>
+      <h3>${titleLink(c)}</h3>
+      <p class="syn">${esc(c.synopsis || 'Synopsis coming soon.')}</p>
+      <div class="src">Source: ${c.sourceUrl ? `<a href="${esc(c.sourceUrl)}" target="_blank" rel="noopener">${esc(c.outlet || host(c.sourceUrl))} · ${esc(host(c.sourceUrl))}</a>` : esc(c.outlet)}</div>
+      <div class="links">
+        ${pdfButtons(c, true)}
+        ${c.sourceUrl ? `<a class="btn" href="${esc(c.sourceUrl)}" target="_blank" rel="noopener">${ICON.ext} Read the source</a>` : ''}
+      </div>
+    </article>`).join('') : '<div class="empty">No case studies yet.</div>';
+}
+function pdfButtons(c, big){
+  if (!c.pdfDownload && !c.pdfView) return `<span class="btn" aria-disabled="true">${ICON.dl} PDF coming soon</span>`;
+  return `<a class="btn primary" href="${esc(c.pdfDownload || c.pdfView)}" target="_blank" rel="noopener">${ICON.dl} Download PDF</a>`;
+}
+
+/* ---------- EK browsers ---------- */
+function buildEkLists(){
+  build('cyber', '#listCyber', 'apCyber', '#findCyber');
+  build('net', '#listNet', 'apNet', '#findNet');
+}
+function build(course, listSel, field, findSel){
+  const counts = {};
+  CASES.forEach(c => c[field].forEach(e => counts[e] = (counts[e]||0) + 1));
+  const ids = Object.keys(counts).sort(ekCmp);
+  const draw = () => {
+    const f = $(findSel).value.trim().toLowerCase();
+    const shown = ids.filter(id => !f || id.toLowerCase().includes(f) || statement(course,id).toLowerCase().includes(f) || loTitle(course,id).toLowerCase().includes(f));
+    $(listSel).innerHTML = shown.length
+      ? `<div class="chips">${shown.map(id => `<button type="button" class="ek ${course}" data-course="${course}" data-ek="${esc(id)}" aria-pressed="${state[course]===id}" title="${esc(statement(course,id))}">${esc(id)}</button>`).join('')}</div>`
+      : '<div class="note">No matching EKs.</div>';
+  };
+  $(findSel).addEventListener('input', draw);
+  $(listSel).addEventListener('click', e => { const b = e.target.closest('.ek'); if (b) pickEk(course, b.dataset.ek); });
+  $(listSel)._draw = draw; draw();
+}
+function pickEk(course, id){
+  state[course] = state[course] === id ? '' : id;
+  state.page = 1;
+  syncEk();
+  if (view === 'results') update();
+}
+function syncEk(){
+  $('#listCyber')._draw && $('#listCyber')._draw();
+  $('#listNet')._draw && $('#listNet')._draw();
+  descFor('cyber', '#descCyber', 'AP Cybersecurity');
+  descFor('net', '#descNet', 'AP Networking');
+  const sel = [];
+  if (state.cyber) sel.push(['cyber', 'AP Cyber ' + state.cyber]);
+  if (state.net) sel.push(['net', 'AP Net ' + state.net]);
+  $('#ekSel').innerHTML = sel.length
+    ? sel.map(([k,t]) => `<button type="button" class="pill" data-k="${k}" aria-label="Remove ${esc(t)}">${esc(t)}<span>✕</span></button>`).join('')
+    : '';
+}
+function descFor(course, sel, name){
+  const id = state[course];
+  $(sel).innerHTML = id
+    ? `<b>${esc(id)}</b> — ${esc(statement(course,id) || 'Statement not found in the framework reference.')}${loTitle(course,id) ? `<div class="note" style="margin-top:6px">Learning objective: ${esc(loTitle(course,id))}</div>` : ''}`
+    : 'Select an EK number to read the statement and add it to your search.';
+}
+
+/* ---------- filters ---------- */
+function buildTermOptions(){
+  const terms = [...new Set(CASES.flatMap(c => c.keyTerms))].sort((a,b) => a.localeCompare(b, undefined, {sensitivity:'base'}));
+  $('#term').innerHTML = '<option value="">Any key term</option>' + terms.map(t => `<option ${t===state.term?'selected':''}>${esc(t)}</option>`).join('');
+  $('#q').value = state.q; $('#from').value = state.from; $('#to').value = state.to; $('#sort').value = state.sort;
+  document.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.cat === state.cat)));
+}
+function filtered(){
+  const q = state.q.trim().toLowerCase();
+  let list = CASES.filter(c => {
+    if (state.cat && c.category.toLowerCase() !== state.cat.toLowerCase()) return false;
+    if (state.term && !c.keyTerms.some(t => t.toLowerCase() === state.term.toLowerCase())) return false;
+    if (state.from && c.date < state.from) return false;
+    if (state.to && c.date > state.to) return false;
+    if (state.cyber && !c.apCyber.includes(state.cyber)) return false;
+    if (state.net && !c.apNet.includes(state.net)) return false;
+    if (q) {
+      const hay = [c.headline, c.synopsis, c.outlet, c.category, c.keyTerms.join(' '), c.apCyber.join(' '), c.apNet.join(' ')].join(' ').toLowerCase();
+      if (!q.split(/\s+/).every(w => hay.includes(w))) return false;
+    }
+    return true;
+  });
+  const by = {
+    new:(a,b) => b.date.localeCompare(a.date) || a._i - b._i,
+    old:(a,b) => a.date.localeCompare(b.date) || b._i - a._i,
+    az:(a,b) => a.headline.replace(/^the\s+/i,'').localeCompare(b.headline.replace(/^the\s+/i,'')),
+    cat:(a,b) => a.category.localeCompare(b.category) || b.date.localeCompare(a.date) || a._i - b._i
+  }[state.sort];
+  return list.sort(by);
+}
+function ekChips(course, ids){
+  if (!ids.length) return '<span class="note">Not mapped yet</span>';
+  return `<div class="chips">${[...ids].sort(ekCmp).map(id => `<button type="button" class="ek ${course}" data-course="${course}" data-ek="${esc(id)}" aria-pressed="${state[course]===id}" title="${esc(statement(course,id))}">${esc(id)}</button>`).join('')}</div>`;
+}
+function update(){ render(); if (view === 'results') writeHash(false); }
+function render(){
+  const list = filtered();
+  const pages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+  state.page = Math.min(Math.max(1, state.page), pages);
+  const start = (state.page - 1) * PAGE_SIZE;
+  const slice = list.slice(start, start + PAGE_SIZE);
+
+
+  $('#results').innerHTML = slice.length ? slice.map(c => `
+    <article class="rcard ${catCls(c)}">
+      <div class="rtop">
+        <h3>${titleLink(c)}</h3>
+        <span class="badge ${catCls(c)}">${esc(c.category||'Case')}</span>
+      </div>
+      <div class="meta" style="margin-top:6px"><span>${esc(fmtDate(c.date))}</span><span>Source outlet: <b style="color:var(--text);font-weight:600">${esc(c.outlet)}</b></span></div>
+      <div class="src" style="margin-top:6px">Source URL: ${c.sourceUrl ? `<a href="${esc(c.sourceUrl)}" target="_blank" rel="noopener">${esc(c.sourceUrl)}</a>` : '—'}</div>
+      <div class="rgrid rek">
+        <div><div class="lab">AP Cybersecurity EK</div>${ekChips('cyber', c.apCyber)}</div>
+        <div class="net"><div class="lab">AP Networking EK</div>${ekChips('net', c.apNet)}</div>
+      </div>
+      ${c.keyTerms.length ? `<div class="kt">Key terms: ${c.keyTerms.map(esc).join(' · ')}</div>` : ''}
+      <div class="rlinks">${pdfButtons(c, false)}</div>
+    </article>`).join('')
+    : `<div class="empty">Nothing matches yet. Try removing a filter or searching a broader word.</div>`;
+
+  $('#pg').textContent = `Page ${state.page} of ${pages}`;
+  $('#prev').disabled = state.page <= 1;
+  $('#next').disabled = state.page >= pages;
+  $('#pager').style.display = list.length > PAGE_SIZE ? 'flex' : 'none';
+
+  const pills = [];
+  if (state.q) pills.push(['q', `“${state.q}”`]);
+  if (state.cat) pills.push(['cat', state.cat]);
+  if (state.term) pills.push(['term', 'Term: ' + state.term]);
+  if (state.from || state.to) pills.push(['date', `${state.from ? fmtDate(state.from) : '…'} – ${state.to ? fmtDate(state.to) : '…'}`]);
+  if (state.cyber) pills.push(['cyber', 'AP Cyber ' + state.cyber]);
+  if (state.net) pills.push(['net', 'AP Net ' + state.net]);
+  $('#active').innerHTML = pills.length
+    ? pills.map(([k,t]) => `<button type="button" class="pill" data-k="${k}" aria-label="Remove filter ${esc(t)}">${esc(t)}<span>✕</span></button>`).join('')
+    : '<span class="note">All case studies</span>';
+  $('#sort2').value = state.sort;
+}
+
+/* ---------- shareable links (#cyber=1.4.A.6&cat=AI…) ---------- */
+function writeHash(push){
+  const p = new URLSearchParams();
+  if (view === 'results') p.set('view', 'results');
+  ['q','cat','term','from','to','cyber','net'].forEach(k => state[k] && p.set(k, state[k]));
+  if (state.sort !== 'new') p.set('sort', state.sort);
+  if (state.page > 1) p.set('page', state.page);
+  const h = p.toString();
+  // Some previews (sandboxed frames) block address-bar updates; the page works fine without it.
+  try { history[push ? 'pushState' : 'replaceState'](null, '', h ? '#' + h : location.pathname + location.search); } catch (e) {}
+}
+function readHash(){
+  const p = new URLSearchParams(location.hash.slice(1));
+  ['q','cat','term','from','to','cyber','net','sort'].forEach(k => { if (p.get(k)) state[k] = p.get(k); });
+  if (p.get('page')) state.page = +p.get('page') || 1;
+  return p.get('view') === 'results';
+}
+
+/* ---------- pages ---------- */
+let view = 'home';
+function showResults(push){
+  view = 'results';
+  $('#home').hidden = true; $('.nav').hidden = true; $('#resultsPage').hidden = false;
+  render(); writeHash(push);
+  // Ads inside the results page can only load once it is visible.
+  document.querySelectorAll('#resultsPage ins.adsbygoogle:not([data-pushed])').forEach(a => { a.dataset.pushed = 1; try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {} });
+  window.scrollTo(0, 0); $('#res-h').focus({ preventScroll:true });
+}
+function showHome(fromPop){
+  view = 'home';
+  $('#resultsPage').hidden = true; $('#home').hidden = false; $('.nav').hidden = false;
+  buildTermOptions(); syncEk();
+  if (!fromPop) { try { history.pushState(null, '', location.pathname + location.search); } catch (e) {} }
+  $('#finder').scrollIntoView({ block:'start' });
+}
+window.addEventListener('popstate', () => {
+  const wantResults = new URLSearchParams(location.hash.slice(1)).get('view') === 'results';
+  if (wantResults && view !== 'results') { readHash(); showResults(false); }
+  else if (!wantResults && view === 'results') showHome(true);
+});
+
+/* ---------- events ---------- */
+$('#q').addEventListener('input', e => { state.q = e.target.value; });
+$('#term').addEventListener('change', e => { state.term = e.target.value; });
+$('#from').addEventListener('change', e => { state.from = e.target.value; });
+$('#to').addEventListener('change', e => { state.to = e.target.value; });
+$('#sort').addEventListener('change', e => { state.sort = e.target.value; });
+$('#sort2').addEventListener('change', e => { state.sort = e.target.value; state.page = 1; $('#sort').value = state.sort; update(); });
+document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => {
+  state.cat = b.dataset.cat;
+  document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+}));
+// Search button (and Enter in the search box) opens the results page.
+const runSearch = () => { state.q = $('#q').value; state.page = 1; showResults(true); };
+$('#go').addEventListener('click', runSearch);
+$('#q').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); runSearch(); } });
+$('#ekSel').addEventListener('click', e => { const b = e.target.closest('.pill'); if (b) { state[b.dataset.k] = ''; syncEk(); } });
+$('#results').addEventListener('click', e => { const b = e.target.closest('.ek'); if (b) pickEk(b.dataset.course, b.dataset.ek); });
+$('#active').addEventListener('click', e => {
+  const b = e.target.closest('.pill'); if (!b) return;
+  const k = b.dataset.k;
+  if (k === 'date') { state.from = state.to = ''; } else state[k] = '';
+  state.page = 1; buildTermOptions(); syncEk(); update();
+});
+$('#reset').addEventListener('click', () => {
+  Object.assign(state, { q:'', cat:'', term:'', from:'', to:'', sort:'new', cyber:'', net:'', page:1 });
+  $('#findCyber').value = ''; $('#findNet').value = '';
+  buildTermOptions(); syncEk();
+});
+$('#back').addEventListener('click', () => showHome(false));
+$('#back2').addEventListener('click', () => showHome(false));
+const goPage = d => { state.page += d; update(); window.scrollTo({ top: $('#resultsPage').offsetTop - 10, behavior:'smooth' }); };
+$('#prev').addEventListener('click', () => goPage(-1));
+$('#next').addEventListener('click', () => goPage(1));
+
+load().then(syncEk);
+</script>
+<script src="assets/rain.js"></script>
+</body>
+</html>
