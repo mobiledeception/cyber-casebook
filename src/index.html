@@ -36,19 +36,19 @@ __HEAD__
     <div class="ekgrid">
       <div class="ekpanel cyber">
         <h3>AP Cybersecurity</h3>
-        <div class="sub">Essential knowledge statements used in these cases</div>
+        <div class="sub">Essential knowledge statements used in these cases. Pick as many as you like.</div>
         <label class="sr" for="findCyber">Find an AP Cybersecurity EK</label>
         <input class="ekfind" id="findCyber" type="search" placeholder="Find an EK number or word…">
         <div class="eklist" id="listCyber"></div>
-        <div class="ekdesc" id="descCyber" aria-live="polite">Select an EK number to read the statement and add it to your search.</div>
+        <div class="ekdesc" id="descCyber" aria-live="polite">Select one or more EK numbers to read each statement and add it to your search.</div>
       </div>
       <div class="ekpanel net">
         <h3>AP Networking</h3>
-        <div class="sub">Essential knowledge statements used in these cases</div>
+        <div class="sub">Essential knowledge statements used in these cases. Pick as many as you like.</div>
         <label class="sr" for="findNet">Find an AP Networking EK</label>
         <input class="ekfind" id="findNet" type="search" placeholder="Find an EK number or word…">
         <div class="eklist" id="listNet"></div>
-        <div class="ekdesc" id="descNet" aria-live="polite">Select an EK number to read the statement and add it to your search.</div>
+        <div class="ekdesc" id="descNet" aria-live="polite">Select one or more EK numbers to read each statement and add it to your search.</div>
       </div>
     </div>
   </section>
@@ -157,7 +157,10 @@ function applyAssets(assets){
 
 
 let CASES = [];
-const state = { q:'', cat:'', term:'', from:'', to:'', sort:'new', cyber:'', net:'', page:1 };
+const state = { q:'', cat:'', term:'', from:'', to:'', sort:'new', cyber:[], net:[], match:'any', page:1 };
+let lastEk = { cyber:'', net:'' };   // EK whose statement is shown in each panel
+const hasEk = (course, id) => state[course].includes(id);
+const ekCount = () => state.cyber.length + state.net.length;
 
 /* ---------- helpers ---------- */
 const fmtDate = d => { const [y,m,day] = String(d).split('-').map(Number); if(!y) return d; return new Date(y, m-1, day).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); };
@@ -240,7 +243,7 @@ function build(course, listSel, field, findSel){
     const f = $(findSel).value.trim().toLowerCase();
     const shown = ids.filter(id => !f || id.toLowerCase().includes(f) || statement(course,id).toLowerCase().includes(f) || loTitle(course,id).toLowerCase().includes(f));
     $(listSel).innerHTML = shown.length
-      ? `<div class="chips">${shown.map(id => `<button type="button" class="ek ${course}" data-course="${course}" data-ek="${esc(id)}" aria-pressed="${state[course]===id}" title="${esc(statement(course,id))}">${esc(id)}</button>`).join('')}</div>`
+      ? `<div class="chips">${shown.map(id => `<button type="button" class="ek ${course}" data-course="${course}" data-ek="${esc(id)}" aria-pressed="${hasEk(course,id)}" title="${esc(statement(course,id))}">${esc(id)}</button>`).join('')}</div>`
       : '<div class="note">No matching EKs.</div>';
   };
   $(findSel).addEventListener('input', draw);
@@ -248,7 +251,14 @@ function build(course, listSel, field, findSel){
   $(listSel)._draw = draw; draw();
 }
 function pickEk(course, id){
-  state[course] = state[course] === id ? '' : id;
+  const list = state[course];
+  if (list.includes(id)) {
+    state[course] = list.filter(x => x !== id);
+    if (lastEk[course] === id) lastEk[course] = state[course][state[course].length - 1] || '';
+  } else {
+    state[course] = [...list, id].sort(ekCmp);
+    lastEk[course] = id;
+  }
   state.page = 1;
   syncEk();
   if (view === 'results') update();
@@ -258,18 +268,23 @@ function syncEk(){
   $('#listNet')._draw && $('#listNet')._draw();
   descFor('cyber', '#descCyber', 'AP Cybersecurity');
   descFor('net', '#descNet', 'AP Networking');
-  const sel = [];
-  if (state.cyber) sel.push(['cyber', 'AP Cyber ' + state.cyber]);
-  if (state.net) sel.push(['net', 'AP Net ' + state.net]);
-  $('#ekSel').innerHTML = sel.length
-    ? sel.map(([k,t]) => `<button type="button" class="pill" data-k="${k}" aria-label="Remove ${esc(t)}">${esc(t)}<span>✕</span></button>`).join('')
-    : '';
+  $('#ekSel').innerHTML = ekPills('Remove') + matchToggle() ||
+    '<span class="note">Pick one or more EK numbers above.</span>';
+}
+function ekPills(label){
+  return [...state.cyber.map(id => ['cyber', id, 'AP Cyber ' + id]), ...state.net.map(id => ['net', id, 'AP Net ' + id])]
+    .map(([k,id,t]) => `<button type="button" class="pill" data-k="${k}" data-ek="${esc(id)}" aria-label="${label} ${esc(t)}">${esc(t)}<span>✕</span></button>`).join('');
+}
+// With two or more EKs picked: show cases that use ANY of them, or only cases that use ALL of them.
+function matchToggle(){
+  if (ekCount() < 2) return '';
+  return `<span class="match" role="group" aria-label="How to combine EKs">Match <button type="button" data-match="any" aria-pressed="${state.match==='any'}">Any</button><button type="button" data-match="all" aria-pressed="${state.match==='all'}">All</button></span>`;
 }
 function descFor(course, sel, name){
-  const id = state[course];
+  const id = hasEk(course, lastEk[course]) ? lastEk[course] : state[course][state[course].length - 1];
   $(sel).innerHTML = id
     ? `<b>${esc(id)}</b> — ${esc(statement(course,id) || 'Statement not found in the framework reference.')}${loTitle(course,id) ? `<div class="note" style="margin-top:6px">Learning objective: ${esc(loTitle(course,id))}</div>` : ''}`
-    : 'Select an EK number to read the statement and add it to your search.';
+    : 'Select one or more EK numbers to read each statement and add it to your search.';
 }
 
 /* ---------- filters ---------- */
@@ -286,8 +301,10 @@ function filtered(){
     if (state.term && !c.keyTerms.some(t => t.toLowerCase() === state.term.toLowerCase())) return false;
     if (state.from && c.date < state.from) return false;
     if (state.to && c.date > state.to) return false;
-    if (state.cyber && !c.apCyber.includes(state.cyber)) return false;
-    if (state.net && !c.apNet.includes(state.net)) return false;
+    if (ekCount()) {
+      const hits = [...state.cyber.map(id => c.apCyber.includes(id)), ...state.net.map(id => c.apNet.includes(id))];
+      if (state.match === 'all' ? !hits.every(Boolean) : !hits.some(Boolean)) return false;
+    }
     if (q) {
       const hay = [c.headline, c.synopsis, c.outlet, c.category, c.keyTerms.join(' '), c.apCyber.join(' '), c.apNet.join(' ')].join(' ').toLowerCase();
       if (!q.split(/\s+/).every(w => hay.includes(w))) return false;
@@ -304,7 +321,7 @@ function filtered(){
 }
 function ekChips(course, ids){
   if (!ids.length) return '<span class="note">Not mapped yet</span>';
-  return `<div class="chips">${[...ids].sort(ekCmp).map(id => `<button type="button" class="ek ${course}" data-course="${course}" data-ek="${esc(id)}" aria-pressed="${state[course]===id}" title="${esc(statement(course,id))}">${esc(id)}</button>`).join('')}</div>`;
+  return `<div class="chips">${[...ids].sort(ekCmp).map(id => `<button type="button" class="ek ${course}" data-course="${course}" data-ek="${esc(id)}" aria-pressed="${hasEk(course,id)}" title="${esc(statement(course,id))}">${esc(id)}</button>`).join('')}</div>`;
 }
 function update(){ render(); if (view === 'results') writeHash(false); }
 function render(){
@@ -342,10 +359,8 @@ function render(){
   if (state.cat) pills.push(['cat', state.cat]);
   if (state.term) pills.push(['term', 'Term: ' + state.term]);
   if (state.from || state.to) pills.push(['date', `${state.from ? fmtDate(state.from) : '…'} – ${state.to ? fmtDate(state.to) : '…'}`]);
-  if (state.cyber) pills.push(['cyber', 'AP Cyber ' + state.cyber]);
-  if (state.net) pills.push(['net', 'AP Net ' + state.net]);
-  $('#active').innerHTML = pills.length
-    ? pills.map(([k,t]) => `<button type="button" class="pill" data-k="${k}" aria-label="Remove filter ${esc(t)}">${esc(t)}<span>✕</span></button>`).join('')
+  $('#active').innerHTML = (pills.length || ekCount())
+    ? pills.map(([k,t]) => `<button type="button" class="pill" data-k="${k}" aria-label="Remove filter ${esc(t)}">${esc(t)}<span>✕</span></button>`).join('') + ekPills('Remove filter') + matchToggle()
     : '<span class="note">All case studies</span>';
   $('#sort2').value = state.sort;
 }
@@ -354,7 +369,9 @@ function render(){
 function writeHash(push){
   const p = new URLSearchParams();
   if (view === 'results') p.set('view', 'results');
-  ['q','cat','term','from','to','cyber','net'].forEach(k => state[k] && p.set(k, state[k]));
+  ['q','cat','term','from','to'].forEach(k => state[k] && p.set(k, state[k]));
+  ['cyber','net'].forEach(k => state[k].length && p.set(k, state[k].join(',')));
+  if (ekCount() > 1 && state.match === 'all') p.set('match', 'all');
   if (state.sort !== 'new') p.set('sort', state.sort);
   if (state.page > 1) p.set('page', state.page);
   const h = p.toString();
@@ -363,7 +380,9 @@ function writeHash(push){
 }
 function readHash(){
   const p = new URLSearchParams(location.hash.slice(1));
-  ['q','cat','term','from','to','cyber','net','sort'].forEach(k => { if (p.get(k)) state[k] = p.get(k); });
+  ['q','cat','term','from','to','sort'].forEach(k => { if (p.get(k)) state[k] = p.get(k); });
+  ['cyber','net'].forEach(k => { if (p.get(k)) { state[k] = p.get(k).split(',').map(x => x.trim()).filter(Boolean).sort(ekCmp); lastEk[k] = state[k][state[k].length - 1]; } });
+  state.match = p.get('match') === 'all' ? 'all' : 'any';
   if (p.get('page')) state.page = +p.get('page') || 1;
   return p.get('view') === 'results';
 }
@@ -406,16 +425,26 @@ document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click'
 const runSearch = () => { state.q = $('#q').value; state.page = 1; showResults(true); };
 $('#go').addEventListener('click', runSearch);
 $('#q').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); runSearch(); } });
-$('#ekSel').addEventListener('click', e => { const b = e.target.closest('.pill'); if (b) { state[b.dataset.k] = ''; syncEk(); } });
+// Removing an EK pill, or switching Any/All, works the same on the home page and the results page.
+function ekClick(e){
+  const m = e.target.closest('[data-match]');
+  if (m) { state.match = m.dataset.match; state.page = 1; syncEk(); if (view === 'results') update(); return true; }
+  const b = e.target.closest('.pill[data-ek]');
+  if (b) { pickEk(b.dataset.k, b.dataset.ek); return true; }
+  return false;
+}
+$('#ekSel').addEventListener('click', ekClick);
 $('#results').addEventListener('click', e => { const b = e.target.closest('.ek'); if (b) pickEk(b.dataset.course, b.dataset.ek); });
 $('#active').addEventListener('click', e => {
+  if (ekClick(e)) return;
   const b = e.target.closest('.pill'); if (!b) return;
   const k = b.dataset.k;
   if (k === 'date') { state.from = state.to = ''; } else state[k] = '';
   state.page = 1; buildTermOptions(); syncEk(); update();
 });
 $('#reset').addEventListener('click', () => {
-  Object.assign(state, { q:'', cat:'', term:'', from:'', to:'', sort:'new', cyber:'', net:'', page:1 });
+  Object.assign(state, { q:'', cat:'', term:'', from:'', to:'', sort:'new', cyber:[], net:[], match:'any', page:1 });
+  lastEk = { cyber:'', net:'' };
   $('#findCyber').value = ''; $('#findNet').value = '';
   buildTermOptions(); syncEk();
 });
