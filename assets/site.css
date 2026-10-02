@@ -32,7 +32,7 @@ header.top{padding:22px 0 8px}
 .sec{margin:34px 0 0}
 #latest{margin-top:13px}
 .sechead{--a:9.2;--z:1;position:relative;margin-bottom:10px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:#000;aspect-ratio:var(--a)}
-.sechead img{--k:1.05;position:absolute;left:0;display:block;width:calc(var(--z) * var(--k) * 100%);max-width:none;height:auto;top:calc((0.5 - var(--c) * var(--z) * var(--k) * var(--a) / 2) * 100%);transform:translateX(calc(var(--t) - var(--x) * 100%))}
+.sechead img{--k:1.05;--s:1;position:absolute;left:0;display:block;width:calc(var(--z) * var(--s) * var(--k) * 100%);max-width:none;height:auto;top:calc((0.5 - var(--c) * var(--z) * var(--s) * var(--k) * var(--a) / 2) * 100%);-webkit-mask-image:linear-gradient(90deg,#000 78%,transparent);mask-image:linear-gradient(90deg,#000 78%,transparent);transform:translateX(calc(var(--t) - var(--x) * 100%))}
 .sec-sub{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 12px;align-items:center;margin:-2px 0 14px;color:var(--faint);font-size:12.5px}
 .note{color:var(--faint);font-size:12.5px}
 
