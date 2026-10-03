@@ -253,3 +253,12 @@ footer p{margin:6px auto 0;max-width:820px}
 select{-webkit-appearance:none;appearance:none;padding-right:36px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2300FF66' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:14px}
 input[type=date]{-webkit-appearance:none;appearance:none;display:block;line-height:44px;padding-top:0;padding-bottom:0}
 input[type=date]::-webkit-date-and-time-value{text-align:left;margin:0}
+
+/* key term list: All terms / AP framework toggle (sits on the label line without changing its height) */
+.kt-field{position:relative}
+.kt-set{position:absolute;right:0;top:-5px;display:inline-flex}
+.kt-set button{box-sizing:border-box;height:19px;font:600 9.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:0 7px;background:#000;color:var(--muted);border:1px solid var(--line2);cursor:pointer}
+.kt-set button:first-child{border-radius:2px 0 0 2px}
+.kt-set button:last-child{border-left:0;border-radius:0 2px 2px 0}
+.kt-set button[aria-pressed="true"]{background:var(--green-dim);color:var(--green);border-color:var(--green)}
+.apterm{color:var(--green);border-bottom:1px dotted var(--green)}

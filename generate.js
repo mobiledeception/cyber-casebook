@@ -382,6 +382,13 @@ function copyDir(from, to) {
   const write = (f, s) => fs.writeFileSync(path.join(OUT, f), s);
 
   write('index.html', buildIndex(cases, pages));
+  const schoolSize = require('./school.js')({ ROOT, OUT, cfg, cases, EKMAP, json });
+  // Wording of every AP essential knowledge statement and learning objective (lowercase words only).
+  // The Apps Script reads this to fill the sheet's "AP Framework Key Terms" column.
+  const fwText = ['ek', 'lo'].flatMap(k => Object.values(EKMAP[k] || {}).flatMap(o => Object.values(o))).join(' ')
+    .toLowerCase().replace(/\(.*?\)/g, ' ').replace(/[^a-z0-9]+/g, ' ').trim();
+  write('ap-framework.txt', ' ' + fwText + ' ');
+  console.log(`Built dist/school.html (${Math.round(schoolSize / 1024)} KB) for the Google version.`);
   write('archive.html', buildArchive(cases));
   write('about.html', buildAbout(cases.length));
   write('privacy.html', buildPrivacy());

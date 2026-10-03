@@ -71,7 +71,12 @@ __HEAD__
         </div>
       </div>
       <div>
-        <label class="f" for="term">Key term</label>
+        <div class="kt-field">
+          <label class="f" for="term">Key term</label>
+          <div class="kt-set" role="group" aria-label="Which key terms to list">
+            <button type="button" data-set="all" aria-pressed="true">All terms</button><button type="button" data-set="ap" aria-pressed="false" title="Only terms used in the AP Cybersecurity and AP Networking frameworks">AP framework</button>
+          </div>
+        </div>
         <select id="term"><option value="">Any key term</option></select>
       </div>
       <div>
@@ -156,7 +161,7 @@ function applyAssets(assets){
 
 
 let CASES = [];
-const state = { q:'', cat:'', term:'', from:'', to:'', sort:'new', cyber:[], net:[], match:'any', page:1 };
+const state = { q:'', cat:'', term:'', terms:'all', from:'', to:'', sort:'new', cyber:[], net:[], match:'any', page:1 };
 let lastEk = { cyber:'', net:'' };   // EK whose statement is shown in each panel
 const hasEk = (course, id) => state[course].includes(id);
 const ekCount = () => state.cyber.length + state.net.length;
@@ -170,10 +175,26 @@ const catCls = c => isAI(c) ? 'ai' : /^network/i.test(c.category) ? 'nw' : '';
 const statement = (course, id) => (EKMAP.ek[course] || {})[id] || '';
 const loTitle = (course, id) => (EKMAP.lo[course] || {})[id.split('.').slice(0,3).join('.')] || '';
 
+/* ---------- AP framework key terms ----------
+   A key term counts as an "AP framework" term when its wording appears in an AP Cybersecurity or
+   AP Networking essential knowledge statement or learning objective. The Google Sheet's
+   "AP Framework Key Terms" column is used when filled in; otherwise it is worked out here. */
+const normWords = s => String(s||'').toLowerCase().replace(/\(.*?\)/g, ' ').replace(/[^a-z0-9]+/g, ' ').trim();
+let FW_TEXT = '';
+function inFramework(term){
+  if (!FW_TEXT) FW_TEXT = ' ' + normWords(['ek','lo'].flatMap(k => Object.values(EKMAP[k]||{}).flatMap(o => Object.values(o))).join(' ')) + ' ';
+  const t = normWords(term); if (!t) return false;
+  const forms = new Set([t, t + 's', t + 'es']);
+  if (/ies$/.test(t)) forms.add(t.slice(0,-3) + 'y');
+  if (/y$/.test(t)) forms.add(t.slice(0,-1) + 'ies');
+  if (/s$/.test(t)) forms.add(t.slice(0,-1));
+  return [...forms].some(f => FW_TEXT.includes(' ' + f + ' '));
+}
+const termList = c => state.terms === 'ap' ? c.apKeyTerms : c.keyTerms;
 function normalize(list){
   return (list||[]).filter(c => c && c.headline).map((c, i) => ({ _i:i,
     date:String(c.date||'').slice(0,10), category:c.category||'', headline:c.headline, synopsis:c.synopsis||'',
-    keyTerms:c.keyTerms||[], apCyber:c.apCyber||[], apNet:c.apNet||[], outlet:c.outlet||'', sourceUrl:c.sourceUrl||'',
+    keyTerms:c.keyTerms||[], apKeyTerms:(c.apKeyTerms && c.apKeyTerms.length) ? c.apKeyTerms : (c.keyTerms||[]).filter(inFramework), apCyber:c.apCyber||[], apNet:c.apNet||[], outlet:c.outlet||'', sourceUrl:c.sourceUrl||'',
     pdfView:c.pdfView||'', pdfDownload:c.pdfDownload||''
   }));
 }
@@ -288,8 +309,10 @@ function descFor(course, sel, name){
 
 /* ---------- filters ---------- */
 function buildTermOptions(){
-  const terms = [...new Set(CASES.flatMap(c => c.keyTerms))].sort((a,b) => a.localeCompare(b, undefined, {sensitivity:'base'}));
-  $('#term').innerHTML = '<option value="">Any key term</option>' + terms.map(t => `<option ${t===state.term?'selected':''}>${esc(t)}</option>`).join('');
+  const terms = [...new Set(CASES.flatMap(termList))].sort((a,b) => a.localeCompare(b, undefined, {sensitivity:'base'}));
+  if (state.term && !terms.some(t => t.toLowerCase() === state.term.toLowerCase())) state.term = '';
+  document.querySelectorAll('.kt-set button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.set === state.terms)));
+  $('#term').innerHTML = `<option value="">${state.terms === 'ap' ? 'Any AP framework term' : 'Any key term'}</option>` + terms.map(t => `<option ${t===state.term?'selected':''}>${esc(t)}</option>`).join('');
   $('#q').value = state.q; $('#from').value = state.from; $('#to').value = state.to; $('#sort').value = state.sort;
   document.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.cat === state.cat)));
 }
@@ -297,7 +320,7 @@ function filtered(){
   const q = state.q.trim().toLowerCase();
   let list = CASES.filter(c => {
     if (state.cat && c.category.toLowerCase() !== state.cat.toLowerCase()) return false;
-    if (state.term && !c.keyTerms.some(t => t.toLowerCase() === state.term.toLowerCase())) return false;
+    if (state.term && !termList(c).some(t => t.toLowerCase() === state.term.toLowerCase())) return false;
     if (state.from && c.date < state.from) return false;
     if (state.to && c.date > state.to) return false;
     if (ekCount()) {
@@ -343,7 +366,7 @@ function render(){
         <div><div class="lab">AP Cybersecurity EK</div>${ekChips('cyber', c.apCyber)}</div>
         <div class="net"><div class="lab">AP Networking EK</div>${ekChips('net', c.apNet)}</div>
       </div>
-      ${c.keyTerms.length ? `<div class="kt">Key terms: ${c.keyTerms.map(esc).join(' · ')}</div>` : ''}
+      ${c.keyTerms.length ? `<div class="kt">Key terms: ${c.keyTerms.map(t => c.apKeyTerms.some(a => a.toLowerCase() === t.toLowerCase()) ? `<span class="apterm" title="Used in the AP framework">${esc(t)}</span>` : esc(t)).join(' · ')}</div>` : ''}
       <div class="rlinks">${pdfButtons(c, false)}</div>
     </article>`).join('')
     : `<div class="empty">Nothing matches yet. Try removing a filter or searching a broader word.</div>`;
@@ -356,7 +379,7 @@ function render(){
   const pills = [];
   if (state.q) pills.push(['q', `“${state.q}”`]);
   if (state.cat) pills.push(['cat', state.cat]);
-  if (state.term) pills.push(['term', 'Term: ' + state.term]);
+  if (state.term) pills.push(['term', (state.terms === 'ap' ? 'AP term: ' : 'Term: ') + state.term]);
   if (state.from || state.to) pills.push(['date', `${state.from ? fmtDate(state.from) : '…'} – ${state.to ? fmtDate(state.to) : '…'}`]);
   $('#active').innerHTML = (pills.length || ekCount())
     ? pills.map(([k,t]) => `<button type="button" class="pill" data-k="${k}" aria-label="Remove filter ${esc(t)}">${esc(t)}<span>✕</span></button>`).join('') + ekPills('Remove filter') + matchToggle()
@@ -369,6 +392,7 @@ function writeHash(push){
   const p = new URLSearchParams();
   if (view === 'results') p.set('view', 'results');
   ['q','cat','term','from','to'].forEach(k => state[k] && p.set(k, state[k]));
+  if (state.terms === 'ap') p.set('terms', 'ap');
   ['cyber','net'].forEach(k => state[k].length && p.set(k, state[k].join(',')));
   if (ekCount() > 1 && state.match === 'all') p.set('match', 'all');
   if (state.sort !== 'new') p.set('sort', state.sort);
@@ -382,6 +406,7 @@ function readHash(){
   ['q','cat','term','from','to','sort'].forEach(k => { if (p.get(k)) state[k] = p.get(k); });
   ['cyber','net'].forEach(k => { if (p.get(k)) { state[k] = p.get(k).split(',').map(x => x.trim()).filter(Boolean).sort(ekCmp); lastEk[k] = state[k][state[k].length - 1]; } });
   state.match = p.get('match') === 'all' ? 'all' : 'any';
+  state.terms = p.get('terms') === 'ap' ? 'ap' : 'all';
   if (p.get('page')) state.page = +p.get('page') || 1;
   return p.get('view') === 'results';
 }
@@ -412,6 +437,11 @@ window.addEventListener('popstate', () => {
 /* ---------- events ---------- */
 $('#q').addEventListener('input', e => { state.q = e.target.value; });
 $('#term').addEventListener('change', e => { state.term = e.target.value; });
+$('.kt-set').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || b.dataset.set === state.terms) return;
+  state.terms = b.dataset.set; state.page = 1; buildTermOptions();
+  if (view === 'results') update();
+});
 $('#from').addEventListener('change', e => { state.from = e.target.value; });
 $('#to').addEventListener('change', e => { state.to = e.target.value; });
 $('#sort').addEventListener('change', e => { state.sort = e.target.value; });
@@ -442,7 +472,7 @@ $('#active').addEventListener('click', e => {
   state.page = 1; buildTermOptions(); syncEk(); update();
 });
 $('#reset').addEventListener('click', () => {
-  Object.assign(state, { q:'', cat:'', term:'', from:'', to:'', sort:'new', cyber:[], net:[], match:'any', page:1 });
+  Object.assign(state, { q:'', cat:'', term:'', terms:'all', from:'', to:'', sort:'new', cyber:[], net:[], match:'any', page:1 });
   lastEk = { cyber:'', net:'' };
   $('#findCyber').value = ''; $('#findNet').value = '';
   buildTermOptions(); syncEk();
