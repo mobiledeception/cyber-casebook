@@ -139,7 +139,7 @@ function featuredCard(c) {
       <div class="meta"><span class="badge ${catCls(c)}">${esc(c.category || 'Case')}</span><span>${esc(fmtDate(c.date))}</span><span>${esc(c.outlet)}</span></div>
       <h3><a href="${esc(c.page)}">${esc(c.headline)}</a></h3>
       <p class="syn">${esc(c.synopsis || 'Synopsis coming soon.')}</p>
-      <div class="src">Source: ${c.sourceUrl ? `<a href="${esc(c.sourceUrl)}" target="_blank" rel="noopener">${esc(c.outlet || host(c.sourceUrl))} · ${esc(host(c.sourceUrl))}</a>` : esc(c.outlet)}</div>
+      <div class="src">Source: ${c.sourceUrl ? `<a href="${esc(c.sourceUrl)}" target="_blank" rel="noopener">${esc(c.outlet || host(c.sourceUrl))}</a>` : esc(c.outlet)}</div>
       <div class="links">
         ${pdfButton(c)}
         ${sourceButton(c)}
