@@ -37,7 +37,9 @@ header.top{padding:22px 0 8px}
 .note{color:var(--faint);font-size:12.5px}
 
 /* featured */
-.featured{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.featured{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.featured .fcard h3{font-size:24px}
+.featured .links{flex-wrap:wrap}
 .fcard,.ekpanel,.searchpanel,.rcard{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);backdrop-filter:blur(2px)}
 .fcard::before,.fcard::after,.rcard::before{content:"";position:absolute;width:14px;height:14px;border-color:var(--green);border-style:solid;opacity:.8}
 .fcard::before,.rcard::before{top:-1px;left:-1px;border-width:2px 0 0 2px}

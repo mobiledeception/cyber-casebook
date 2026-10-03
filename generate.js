@@ -150,7 +150,11 @@ function featuredCard(c) {
 function buildIndex(cases, pages) {
   const desc = 'Real-world Cybersecurity, Networking, and AI case studies for grades 9-12, aligned to AP Cybersecurity and AP Networking essential knowledge.';
   const site = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'The Cyber Casebook', description: desc, url: SITE ? abs('') : undefined };
-  const featured = cases.slice(0, 2).map(featuredCard).join('') || '<div class="empty">No case studies yet.</div>';
+  const isAI = c => /^ai$/i.test(c.category), isNet = c => /^network/i.test(c.category);
+  const picks = [isAI, isNet, c => !isAI(c) && !isNet(c)].map(f => cases.find(f)).filter(Boolean);
+  cases.forEach(c => { if (picks.length < 3 && !picks.includes(c)) picks.push(c); });
+  picks.sort((a, b) => b.date.localeCompare(a.date) || a._i - b._i);
+  const featured = picks.slice(0, 3).map(featuredCard).join('') || '<div class="empty">No case studies yet.</div>';
   let s = read('src/index.html');
   s = s.replace('__HEAD__', headMeta({ title: 'The Cyber Casebook', desc, url: '' }) + '\n' + adHead + `<script type="application/ld+json">${json(site)}</script>`)
     .replace('__FEATURED__', () => featured)

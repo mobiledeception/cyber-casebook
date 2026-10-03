@@ -231,8 +231,19 @@ async function load(){
 }
 
 /* ---------- featured ---------- */
+// The newest case in each category (Cybersecurity, Networking, AI), newest first.
+// If a category has no cases yet, the next newest cases fill the space so three still show.
+function latestThree(list){
+  const picks = [];
+  ['cyber','net','ai'].forEach(k => {
+    const c = list.find(x => (k === 'ai' ? isAI(x) : k === 'net' ? /^network/i.test(x.category) : !isAI(x) && !/^network/i.test(x.category)));
+    if (c) picks.push(c);
+  });
+  list.forEach(c => { if (picks.length < 3 && !picks.includes(c)) picks.push(c); });
+  return picks.sort((a,b) => b.date.localeCompare(a.date) || a._i - b._i).slice(0,3);
+}
 function renderFeatured(){
-  const top = CASES.slice(0,2);
+  const top = latestThree(CASES);
   $('#featured').innerHTML = top.length ? top.map(c => `
     <article class="fcard ${catCls(c)}">
       <div class="meta"><span class="badge ${catCls(c)}">${esc(c.category||'Case')}</span><span>${esc(fmtDate(c.date))}</span><span>${esc(c.outlet)}</span></div>
