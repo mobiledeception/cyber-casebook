@@ -96,6 +96,18 @@ __HEAD__
           <option value="cat">Category</option>
         </select>
       </div>
+      <div class="sp-unit">
+        <label class="f" id="unitLab">AP Cybersecurity unit</label>
+        <div class="useg" role="group" aria-labelledby="unitLab">
+          <button type="button" data-unit="" aria-pressed="true">All</button>
+          <button type="button" data-unit="1" aria-pressed="false" title="Unit 1: Introduction to Security">1</button>
+          <button type="button" data-unit="2" aria-pressed="false" title="Unit 2: Securing Spaces">2</button>
+          <button type="button" data-unit="3" aria-pressed="false" title="Unit 3: Securing Networks">3</button>
+          <button type="button" data-unit="4" aria-pressed="false" title="Unit 4: Securing Devices">4</button>
+          <button type="button" data-unit="5" aria-pressed="false" title="Unit 5: Securing Applications and Data">5</button>
+        </div>
+        <div class="unitname" id="unitName">All units</div>
+      </div>
       <div class="sp-ek">
         <label class="f">Essential knowledge</label>
         <div class="active" id="ekSel"></div>
@@ -161,7 +173,10 @@ function applyAssets(assets){
 
 
 let CASES = [];
-const state = { q:'', cat:'', term:'', terms:'all', from:'', to:'', sort:'new', cyber:[], net:[], match:'any', page:1 };
+const state = { q:'', cat:'', unit:'', term:'', terms:'all', from:'', to:'', sort:'new', cyber:[], net:[], match:'any', page:1 };
+// AP Cybersecurity units: a case belongs to a unit when one of its AP Cybersecurity EKs starts with that unit number.
+const UNITS = { '1':'Introduction to Security', '2':'Securing Spaces', '3':'Securing Networks', '4':'Securing Devices', '5':'Securing Applications and Data' };
+const inUnit = (c, u) => c.apCyber.some(id => String(id).split('.')[0] === u);
 let lastEk = { cyber:'', net:'' };   // EK whose statement is shown in each panel
 const hasEk = (course, id) => state[course].includes(id);
 const ekCount = () => state.cyber.length + state.net.length;
@@ -326,11 +341,17 @@ function buildTermOptions(){
   $('#term').innerHTML = `<option value="">${state.terms === 'ap' ? 'Any AP framework term' : 'Any key term'}</option>` + terms.map(t => `<option ${t===state.term?'selected':''}>${esc(t)}</option>`).join('');
   $('#q').value = state.q; $('#from').value = state.from; $('#to').value = state.to; $('#sort').value = state.sort;
   document.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.cat === state.cat)));
+  syncUnit();
+}
+function syncUnit(){
+  document.querySelectorAll('.useg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.unit === state.unit)));
+  $('#unitName').textContent = state.unit ? `Unit ${state.unit}: ${UNITS[state.unit]}` : 'All units';
 }
 function filtered(){
   const q = state.q.trim().toLowerCase();
   let list = CASES.filter(c => {
     if (state.cat && c.category.toLowerCase() !== state.cat.toLowerCase()) return false;
+    if (state.unit && !inUnit(c, state.unit)) return false;
     if (state.term && !termList(c).some(t => t.toLowerCase() === state.term.toLowerCase())) return false;
     if (state.from && c.date < state.from) return false;
     if (state.to && c.date > state.to) return false;
@@ -390,6 +411,7 @@ function render(){
   const pills = [];
   if (state.q) pills.push(['q', `“${state.q}”`]);
   if (state.cat) pills.push(['cat', state.cat]);
+  if (state.unit) pills.push(['unit', `AP Cyber Unit ${state.unit}`]);
   if (state.term) pills.push(['term', (state.terms === 'ap' ? 'AP term: ' : 'Term: ') + state.term]);
   if (state.from || state.to) pills.push(['date', `${state.from ? fmtDate(state.from) : '…'} – ${state.to ? fmtDate(state.to) : '…'}`]);
   $('#active').innerHTML = (pills.length || ekCount())
@@ -402,7 +424,7 @@ function render(){
 function writeHash(push){
   const p = new URLSearchParams();
   if (view === 'results') p.set('view', 'results');
-  ['q','cat','term','from','to'].forEach(k => state[k] && p.set(k, state[k]));
+  ['q','cat','unit','term','from','to'].forEach(k => state[k] && p.set(k, state[k]));
   if (state.terms === 'ap') p.set('terms', 'ap');
   ['cyber','net'].forEach(k => state[k].length && p.set(k, state[k].join(',')));
   if (ekCount() > 1 && state.match === 'all') p.set('match', 'all');
@@ -414,7 +436,8 @@ function writeHash(push){
 }
 function readHash(){
   const p = new URLSearchParams(location.hash.slice(1));
-  ['q','cat','term','from','to','sort'].forEach(k => { if (p.get(k)) state[k] = p.get(k); });
+  ['q','cat','unit','term','from','to','sort'].forEach(k => { if (p.get(k)) state[k] = p.get(k); });
+  if (state.unit && !UNITS[state.unit]) state.unit = '';
   ['cyber','net'].forEach(k => { if (p.get(k)) { state[k] = p.get(k).split(',').map(x => x.trim()).filter(Boolean).sort(ekCmp); lastEk[k] = state[k][state[k].length - 1]; } });
   state.match = p.get('match') === 'all' ? 'all' : 'any';
   state.terms = p.get('terms') === 'ap' ? 'ap' : 'all';
@@ -461,6 +484,10 @@ document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click'
   state.cat = b.dataset.cat;
   document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
 }));
+document.querySelectorAll('.useg button').forEach(b => b.addEventListener('click', () => {
+  state.unit = b.dataset.unit; state.page = 1; syncUnit();
+  if (view === 'results') update();
+}));
 // Search button (and Enter in the search box) opens the results page.
 const runSearch = () => { state.q = $('#q').value; state.page = 1; showResults(true); };
 $('#go').addEventListener('click', runSearch);
@@ -483,7 +510,7 @@ $('#active').addEventListener('click', e => {
   state.page = 1; buildTermOptions(); syncEk(); update();
 });
 $('#reset').addEventListener('click', () => {
-  Object.assign(state, { q:'', cat:'', term:'', terms:'all', from:'', to:'', sort:'new', cyber:[], net:[], match:'any', page:1 });
+  Object.assign(state, { q:'', cat:'', unit:'', term:'', terms:'all', from:'', to:'', sort:'new', cyber:[], net:[], match:'any', page:1 });
   lastEk = { cyber:'', net:'' };
   $('#findCyber').value = ''; $('#findNet').value = '';
   buildTermOptions(); syncEk();
