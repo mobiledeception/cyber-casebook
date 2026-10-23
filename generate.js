@@ -16,7 +16,7 @@ const path = require('path');
 
 const ROOT = __dirname;
 const OUT = path.join(ROOT, 'dist');
-const PRIVACY_UPDATED = 'October 1, 2026';
+const PRIVACY_UPDATED = 'October 11, 2026';
 const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
 const cfg = JSON.parse(read('config.json'));
 const SITE = String(cfg.siteUrl || '').replace(/\/+$/, '');
@@ -58,6 +58,21 @@ function slugify(c, used) {
   used.add(s);
   return s;
 }
+
+/* ---------- analytics ---------- */
+const gaId = String(cfg.googleAnalytics || '').trim();
+const gaHead = /^G-[A-Z0-9]+$/.test(gaId)
+  ? `<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=${gaId}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '${gaId}');
+</script>
+`
+  : '';
 
 /* ---------- ads ---------- */
 const adClient = String(ADS.client || '').trim();
@@ -101,20 +116,21 @@ function shell({ title, desc, url, pre, body, jsonld, type }) {
   return `<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
+${gaHead}<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 ${headMeta({ title, desc, url, type })}
 ${fonts}
 <link rel="stylesheet" href="${pre}assets/site.css">
+<script>try{if(localStorage.getItem("ccTheme")==="light")document.documentElement.dataset.theme="light"}catch(e){}</script>
 ${adHead}${jsonld ? `<script type="application/ld+json">${json(jsonld)}</script>\n` : ''}</head>
 <body>
 <canvas id="rain" aria-hidden="true"></canvas>
 <div class="wrap">
   <header class="topbar">
     <a class="brand" href="${pre}index.html">&gt;_ The Cyber Casebook <small>// AP CYBER · AP NETWORKING · AI</small></a>
-    <nav aria-label="Site"><a href="${pre}index.html">Home</a><a href="${pre}archive.html">All cases</a><a href="${pre}about.html">About</a></nav>
+    <nav aria-label="Site"><a href="${pre}index.html">Home</a><a href="${pre}archive.html">All cases</a><a href="${pre}about.html">About</a><button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false">Light mode</button></nav>
   </header>
 ${body}
   ${footer(pre)}
@@ -156,7 +172,7 @@ function buildIndex(cases, pages) {
   picks.sort((a, b) => b.date.localeCompare(a.date) || a._i - b._i);
   const featured = picks.slice(0, 3).map(featuredCard).join('') || '<div class="empty">No case studies yet.</div>';
   let s = read('src/index.html');
-  s = s.replace('__HEAD__', headMeta({ title: 'The Cyber Casebook', desc, url: '' }) + '\n' + adHead + `<script type="application/ld+json">${json(site)}</script>`)
+  s = s.replace('__HEAD__', gaHead + headMeta({ title: 'The Cyber Casebook', desc, url: '' }) + '\n' + adHead + `<script type="application/ld+json">${json(site)}</script>`)
     .replace('__FEATURED__', () => featured)
     .replace('<!--AD:home-->', () => adUnit('home'))
     .replace('<!--AD:results-->', () => adUnit('results', true))
@@ -313,7 +329,7 @@ function buildPrivacy() {
       <h2>Information collected automatically</h2>
       <ul>
         <li><b>Hosting logs.</b> Like nearly every website, our web host records basic technical information when a page is requested, such as IP address, browser type, and the page visited. It is used to keep the site running and secure.</li>
-        <li><b>Fonts.</b> Text is displayed with Google Fonts, so your browser requests font files from Google.</li>
+        ${gaHead ? `<li><b>Analytics.</b> We use Google Analytics to count visits and see which pages and case studies are used most. It sets cookies and records information such as the pages you view, how long you stay, your general location (city level), and your device and browser type. We see only combined reports, never anything that identifies you. Learn more at <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses information from sites that use its services</a>, or opt out with the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics opt-out browser add-on</a>.</li>\n        ` : ''}<li><b>Fonts.</b> Text is displayed with Google Fonts, so your browser requests font files from Google.</li>
         <li><b>Case study data and PDFs.</b> The list of case studies is loaded from Google Apps Script, and PDFs are stored on Google Drive. Opening a PDF or the case list sends a request to Google.</li>
         <li><b>Links to news sources.</b> "Read the source" opens another website, which has its own privacy policy.</li>
       </ul>

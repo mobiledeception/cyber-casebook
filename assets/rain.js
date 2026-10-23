@@ -1,4 +1,22 @@
-/* Matrix digital rain behind every page of The Cyber Casebook. */
+/* Matrix digital rain behind every page of The Cyber Casebook, plus the light/dark mode button. */
+(() => {
+  const root = document.documentElement;
+  const set = light => {
+    if (light) root.dataset.theme = 'light'; else delete root.dataset.theme;
+    document.querySelectorAll('[data-theme-toggle]').forEach(b => {
+      b.textContent = light ? 'Dark mode' : 'Light mode';
+      b.setAttribute('aria-pressed', String(light));
+      b.title = light ? 'Switch to the black background' : 'Switch to a white background';
+    });
+  };
+  set(root.dataset.theme === 'light');
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-theme-toggle]'); if (!b) return;
+    const light = root.dataset.theme !== 'light';
+    set(light);
+    try { localStorage.setItem('ccTheme', light ? 'light' : 'dark'); } catch (err) {}
+  });
+})();
 (() => {
   const c = document.getElementById('rain'), ctx = c.getContext('2d');
   const chars = '01アカサタナハマヤラワ0123456789ABCDEF<>/{}#$%'.split('');
@@ -18,5 +36,5 @@
   }
   if (still) { for (let k = 0; k < 120; k++) frame(); return; }
   let last = 0;
-  (function loop(t){ if (t - last > 55) { frame(); last = t; } requestAnimationFrame(loop); })(0);
+  (function loop(t){ if (t - last > 55 && document.documentElement.dataset.theme !== 'light') { frame(); last = t; } requestAnimationFrame(loop); })(0);
 })();
