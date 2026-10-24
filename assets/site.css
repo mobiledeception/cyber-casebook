@@ -27,7 +27,8 @@ header.top{padding:22px 0 8px}
 .nav::-webkit-scrollbar{display:none}
 .nav a{color:var(--muted);text-decoration:none;padding:6px 12px;border:1px solid transparent;border-radius:3px;text-transform:uppercase;letter-spacing:.08em}
 .nav a::before{content:"> ";color:var(--green)}
-.nav a:hover{color:var(--green);border-color:var(--line2);text-shadow:var(--glow)}
+.nav a:focus-visible{color:var(--green);border-color:var(--line2)}
+@media (hover:hover){.nav a:hover{color:var(--green);border-color:var(--line2);text-shadow:var(--glow)}}
 
 /* Canva section headers */
 .sec{margin:34px 0 0}
@@ -162,7 +163,7 @@ footer b{color:var(--green);font-weight:600}
   .sp-actions{grid-column:1 / -1}
 }
 @media (max-width:700px){
-  .nav{gap:0;font-size:clamp(7.5px,2.4vw,12px);justify-content:center}
+  .nav{gap:0;font-size:clamp(7.5px,2.75vw,12px);justify-content:center}
   .nav a{padding:6px 4px;letter-spacing:0}
 }
 @media (max-width:560px){
@@ -280,9 +281,12 @@ input[type=date]::-webkit-date-and-time-value{text-align:left;margin:0}
 /* theme toggle (in the menu) */
 .theme-toggle{font:inherit;color:var(--muted);background:none;border:1px solid transparent;border-radius:3px;padding:6px 12px;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;white-space:nowrap}
 .theme-toggle::before{content:"> ";color:var(--green)}
-.theme-toggle:hover{color:var(--green);border-color:var(--line2);text-shadow:var(--glow)}
+.theme-toggle:focus-visible{color:var(--green);border-color:var(--line2)}
+@media (hover:hover){.theme-toggle:hover{color:var(--green);border-color:var(--line2);text-shadow:var(--glow)}}
 .topbar .theme-toggle{font-size:12px;padding:6px 8px}
-@media (max-width:700px){.nav{flex-wrap:wrap;row-gap:2px}.nav .theme-toggle{flex-basis:100%;padding:4px;letter-spacing:.04em}}
+/* One row on every screen size: the home menu scales down on phones instead of wrapping. */
+@media (max-width:700px){.nav{flex-wrap:nowrap;overflow:visible;font-size:min(12px,calc((100vw - 54px) / 38.5));margin-left:-12px;margin-right:-12px}.nav a,.nav .theme-toggle{padding:6px 3px;letter-spacing:0}}
+@media (max-width:560px){.nav a::before,.nav .theme-toggle::before{content:">";margin-right:.3em}}
 @media (max-width:560px){.topbar .theme-toggle{padding:4px 6px 4px 4px;font-size:11px;letter-spacing:.04em}}
 
 /* light mode: white background, same layout */
