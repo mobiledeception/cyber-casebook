@@ -285,7 +285,7 @@ input[type=date]::-webkit-date-and-time-value{text-align:left;margin:0}
 @media (hover:hover){.theme-toggle:hover{color:var(--green);border-color:var(--line2);text-shadow:var(--glow)}}
 .topbar .theme-toggle{font-size:12px;padding:6px 8px}
 /* One row on every screen size: the home menu scales down on phones instead of wrapping. */
-@media (max-width:700px){.nav{flex-wrap:nowrap;overflow:visible;font-size:min(12px,calc((100vw - 54px) / 38.5));margin-left:-12px;margin-right:-12px}.nav a,.nav .theme-toggle{padding:6px 3px;letter-spacing:0}}
+@media (max-width:700px){.nav{flex-wrap:nowrap;overflow:visible;font-size:min(12px,calc((100vw - 54px) / 32.5));margin-left:-12px;margin-right:-12px}.nav a,.nav .theme-toggle{padding:6px 3px;letter-spacing:0}}
 @media (max-width:560px){.nav a::before,.nav .theme-toggle::before{content:">";margin-right:.3em}}
 @media (max-width:560px){.topbar .theme-toggle{padding:4px 6px 4px 4px;font-size:11px;letter-spacing:.04em}}
 
