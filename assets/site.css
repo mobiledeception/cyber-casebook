@@ -23,7 +23,7 @@ h1,h2,h3{font-family:var(--display);font-weight:400;letter-spacing:.03em;margin:
 /* header */
 header.top{padding:22px 0 8px}
 .banner{display:block;width:100%;height:auto;aspect-ratio:2400/924;border:1px solid var(--line2);border-radius:var(--radius);box-shadow:var(--shadow),0 0 30px rgba(0,255,102,.12);background:#000}
-.nav{display:flex;gap:10px;flex-wrap:nowrap;justify-content:center;margin:14px 0 0;font-size:13px;white-space:nowrap;overflow-x:auto;scrollbar-width:none}
+.nav{display:flex;max-width:100%;box-sizing:border-box;gap:10px;flex-wrap:nowrap;justify-content:center;margin:14px 0 0;font-size:13px;white-space:nowrap;overflow-x:auto;scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}
 .nav a{color:var(--muted);text-decoration:none;padding:6px 12px;border:1px solid transparent;border-radius:3px;text-transform:uppercase;letter-spacing:.08em}
 .nav a::before{content:"> ";color:var(--green)}
@@ -285,7 +285,7 @@ input[type=date]::-webkit-date-and-time-value{text-align:left;margin:0}
 @media (hover:hover){.theme-toggle:hover{color:var(--green);border-color:var(--line2);text-shadow:var(--glow)}}
 .topbar .theme-toggle{font-size:12px;padding:6px 8px}
 /* One row on every screen size: the home menu scales down on phones instead of wrapping. */
-@media (max-width:700px){.nav{flex-wrap:nowrap;overflow:visible;font-size:min(12px,calc((100vw - 54px) / 32.5));margin-left:-12px;margin-right:-12px}.nav a,.nav .theme-toggle{padding:6px 3px;letter-spacing:0}}
+@media (max-width:700px){.nav{flex-wrap:nowrap;overflow:visible;font-size:min(12px,calc((100vw - 64px) / 29.5))}.nav a,.nav .theme-toggle{padding:6px 3px;letter-spacing:0}}
 @media (max-width:560px){.nav a::before,.nav .theme-toggle::before{content:">";margin-right:.3em}}
 @media (max-width:560px){.topbar .theme-toggle{padding:4px 6px 4px 4px;font-size:11px;letter-spacing:.04em}}
 
