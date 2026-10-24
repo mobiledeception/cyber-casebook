@@ -105,9 +105,9 @@ input:focus,select:focus{border-color:var(--green);box-shadow:var(--glow)}
 .searchpanel>div:nth-child(3),.searchpanel>div:nth-child(4),.searchpanel>div:nth-child(5){grid-column:span 2}
 .searchpanel>div:nth-child(3){grid-column:1 / span 2}
 .searchpanel>div:nth-child(6){grid-column:1 / span 2}
-.sp-unit{grid-column:3 / span 4}
+.sp-unit{grid-column:span 2}
 .sp-ek{grid-column:1 / -1}
-.useg{display:grid;grid-template-columns:1.4fr repeat(5,1fr);border:1px solid var(--line2);border-radius:3px;overflow:hidden}
+.useg{display:grid;grid-auto-flow:column;grid-template-columns:1.4fr;grid-auto-columns:1fr;border:1px solid var(--line2);border-radius:3px;overflow:hidden}
 .useg button{height:44px;font:600 12.5px var(--mono);text-transform:uppercase;padding:0 4px;background:var(--field);color:var(--muted);border:0;border-right:1px solid var(--line2);cursor:pointer}
 .useg button:last-child{border-right:0}
 .useg button[aria-pressed="true"]{background:var(--green-dim);color:var(--green);text-shadow:var(--glow)}
@@ -157,7 +157,8 @@ footer b{color:var(--green);font-weight:600}
   .featured .links .btn{font-size:12px;padding:10px 8px}
   .searchpanel{grid-template-columns:1fr 1fr}
   .searchpanel>div,.sp-q,.sp-ek,.searchpanel>div:nth-child(n){grid-column:auto}
-  .sp-q,.sp-ek,.sp-unit,.searchpanel>div:nth-child(2){grid-column:1 / -1}
+  .sp-q,.sp-ek,.searchpanel>div:nth-child(2){grid-column:1 / -1}
+  .searchpanel>div.sp-unit{grid-column:1 / -1}
   .sp-actions{grid-column:1 / -1}
 }
 @media (max-width:700px){
@@ -303,3 +304,12 @@ input[type=date]::-webkit-date-and-time-value{text-align:left;margin:0}
 :root[data-theme="light"] .banner{box-shadow:var(--shadow)}
 :root[data-theme="light"] .skeleton{background:linear-gradient(90deg,#eef5f0 0%,#dcebe1 50%,#eef5f0 100%);background-size:200% 100%}
 :root[data-theme="light"] .adslot{background:#f6faf7}
+.sp-unit.net .useg button[aria-pressed="true"]{background:var(--cyan-dim);color:var(--cyan)}
+
+/* light mode: banner and section header images flipped to a white background */
+:root[data-theme="light"] .banner{background:#fff;filter:invert(1) hue-rotate(180deg) saturate(1.3) contrast(1.05)}
+/* light mode: section headers drawn as text on white instead of the dark images */
+:root[data-theme="light"] .sechead{background:#fff;border-color:var(--line2);display:flex;flex-direction:column;justify-content:center;gap:2px;padding:clamp(12px,2vw,22px) 3.2%;aspect-ratio:auto}
+:root[data-theme="light"] .sechead img{display:none}
+:root[data-theme="light"] .sechead::before{content:attr(data-kick);font:700 clamp(10px,1.35vw,16px)/1.2 var(--mono);color:var(--green);text-transform:uppercase;letter-spacing:.06em}
+:root[data-theme="light"] .sechead::after{content:attr(data-title);font:400 clamp(20px,3.6vw,44px)/1.1 var(--display);color:var(--green);text-transform:uppercase;letter-spacing:.04em}

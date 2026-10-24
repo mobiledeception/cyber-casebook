@@ -25,14 +25,14 @@ __HEAD__
 
   <main id="home">
   <section class="sec" id="latest" aria-labelledby="latest-h">
-    <div class="sechead"><img data-asset="latest" style="--s:.745;--c:.438;--x:.056;--t:23px" src="img/latest.jpg" alt="" width="1200" height="600"></div>
+    <div class="sechead" data-kick="// Just in" data-title="Latest case studies"><img data-asset="latest" style="--s:.745;--c:.438;--x:.056;--t:23px" src="img/latest.jpg" alt="" width="1200" height="600"></div>
     <h2 id="latest-h" class="sr">Latest case studies</h2>
     <div class="featured" id="featured">__FEATURED__</div>
   </section>
   <!--AD:home-->
 
   <section class="sec" id="ek" aria-labelledby="ek-h">
-    <div class="sechead"><img data-asset="ek" style="--c:.450;--x:.052;--t:19px" src="img/ek.jpg" alt="" width="1200" height="600"></div>
+    <div class="sechead" data-kick="// AP alignment" data-title="Browse by essential knowledge"><img data-asset="ek" style="--c:.450;--x:.052;--t:19px" src="img/ek.jpg" alt="" width="1200" height="600"></div>
     <h2 id="ek-h" class="sr">Browse by Essential Knowledge</h2>
     <div class="ekgrid">
       <div class="ekpanel cyber">
@@ -55,7 +55,7 @@ __HEAD__
   </section>
 
   <section class="sec" id="finder" aria-labelledby="finder-h">
-    <div class="sechead"><img data-asset="search" style="--s:.952;--c:.512;--x:.051;--t:21px" src="img/search.jpg" alt="" width="1200" height="600"></div>
+    <div class="sechead" data-kick="// Library" data-title="Search the Casebook"><img data-asset="search" style="--s:.952;--c:.512;--x:.051;--t:21px" src="img/search.jpg" alt="" width="1200" height="600"></div>
     <h2 id="finder-h" class="sr">Search the Casebook</h2>
     <div class="searchpanel" id="searchForm" role="search">
       <div class="sp-q">
@@ -97,9 +97,9 @@ __HEAD__
           <option value="cat">Category</option>
         </select>
       </div>
-      <div class="sp-unit">
+      <div class="sp-unit cyber">
         <label class="f" id="unitLab">AP Cybersecurity unit</label>
-        <div class="useg" role="group" aria-labelledby="unitLab">
+        <div class="useg" data-key="unit" role="group" aria-labelledby="unitLab">
           <button type="button" data-unit="" aria-pressed="true">All</button>
           <button type="button" data-unit="1" aria-pressed="false" title="Unit 1: Introduction to Security">1</button>
           <button type="button" data-unit="2" aria-pressed="false" title="Unit 2: Securing Spaces">2</button>
@@ -108,6 +108,17 @@ __HEAD__
           <button type="button" data-unit="5" aria-pressed="false" title="Unit 5: Securing Applications and Data">5</button>
         </div>
         <div class="unitname" id="unitName">All units</div>
+      </div>
+      <div class="sp-unit net">
+        <label class="f" id="nunitLab">AP Networking unit</label>
+        <div class="useg" data-key="nunit" role="group" aria-labelledby="nunitLab">
+          <button type="button" data-unit="" aria-pressed="true">All</button>
+          <button type="button" data-unit="1" aria-pressed="false" title="Unit 1: Managing My Connections">1</button>
+          <button type="button" data-unit="2" aria-pressed="false" title="Unit 2: Managing My Shared Connections">2</button>
+          <button type="button" data-unit="3" aria-pressed="false" title="Unit 3: Managing Many Connections">3</button>
+          <button type="button" data-unit="4" aria-pressed="false" title="Unit 4: Managing Our Global Connections">4</button>
+        </div>
+        <div class="unitname" id="nunitName">All units</div>
       </div>
       <div class="sp-ek">
         <label class="f">Essential knowledge</label>
@@ -124,7 +135,7 @@ __HEAD__
   <main id="resultsPage" hidden aria-labelledby="res-h">
     <section class="sec">
       <button class="btn back" id="back" type="button"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg> Back to home</button>
-      <div class="sechead" style="margin-top:18px"><img data-asset="results" style="--s:.71;--c:.49;--x:.042;--t:20px" src="img/results.jpg" alt="" width="1200" height="600"></div>
+      <div class="sechead" data-kick="// Query output" data-title="Search results" style="margin-top:18px"><img data-asset="results" style="--s:.71;--c:.49;--x:.042;--t:20px" src="img/results.jpg" alt="" width="1200" height="600"></div>
       <h2 id="res-h" class="sr" tabindex="-1">Search results</h2>
       <div class="resbar"><div class="active" id="active"></div><div class="res-tools"><label class="sr" for="sort2">Sort by</label><select id="sort2" class="sort2">
           <option value="new">Newest first</option><option value="old">Oldest first</option><option value="az">Headline A–Z</option><option value="cat">Category</option>
@@ -174,10 +185,13 @@ function applyAssets(assets){
 
 
 let CASES = [];
-const state = { q:'', cat:'', unit:'', term:'', terms:'all', from:'', to:'', sort:'new', cyber:[], net:[], match:'any', page:1 };
-// AP Cybersecurity units: a case belongs to a unit when one of its AP Cybersecurity EKs starts with that unit number.
-const UNITS = { '1':'Introduction to Security', '2':'Securing Spaces', '3':'Securing Networks', '4':'Securing Devices', '5':'Securing Applications and Data' };
-const inUnit = (c, u) => c.apCyber.some(id => String(id).split('.')[0] === u);
+const state = { q:'', cat:'', unit:'', nunit:'', term:'', terms:'all', from:'', to:'', sort:'new', cyber:[], net:[], match:'any', page:1 };
+// Course units: a case belongs to a unit when one of its EKs for that course starts with the unit number.
+const UNITS = {
+  unit:  { field:'apCyber', short:'AP Cyber', names:{ '1':'Introduction to Security', '2':'Securing Spaces', '3':'Securing Networks', '4':'Securing Devices', '5':'Securing Applications and Data' } },
+  nunit: { field:'apNet', short:'AP Net', names:{ '1':'Managing My Connections', '2':'Managing My Shared Connections', '3':'Managing Many Connections', '4':'Managing Our Global Connections' } }
+};
+const inUnit = (c, key, u) => c[UNITS[key].field].some(id => String(id).split('.')[0] === u);
 let lastEk = { cyber:'', net:'' };   // EK whose statement is shown in each panel
 const hasEk = (course, id) => state[course].includes(id);
 const ekCount = () => state.cyber.length + state.net.length;
@@ -345,14 +359,17 @@ function buildTermOptions(){
   syncUnit();
 }
 function syncUnit(){
-  document.querySelectorAll('.useg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.unit === state.unit)));
-  $('#unitName').textContent = state.unit ? `Unit ${state.unit}: ${UNITS[state.unit]}` : 'All units';
+  Object.keys(UNITS).forEach(key => {
+    document.querySelectorAll(`.useg[data-key="${key}"] button`).forEach(b => b.setAttribute('aria-pressed', String(b.dataset.unit === state[key])));
+    $('#' + key + 'Name').textContent = state[key] ? `Unit ${state[key]}: ${UNITS[key].names[state[key]]}` : 'All units';
+  });
 }
 function filtered(){
   const q = state.q.trim().toLowerCase();
   let list = CASES.filter(c => {
     if (state.cat && c.category.toLowerCase() !== state.cat.toLowerCase()) return false;
-    if (state.unit && !inUnit(c, state.unit)) return false;
+    if (state.unit && !inUnit(c, 'unit', state.unit)) return false;
+    if (state.nunit && !inUnit(c, 'nunit', state.nunit)) return false;
     if (state.term && !termList(c).some(t => t.toLowerCase() === state.term.toLowerCase())) return false;
     if (state.from && c.date < state.from) return false;
     if (state.to && c.date > state.to) return false;
@@ -412,7 +429,7 @@ function render(){
   const pills = [];
   if (state.q) pills.push(['q', `“${state.q}”`]);
   if (state.cat) pills.push(['cat', state.cat]);
-  if (state.unit) pills.push(['unit', `AP Cyber Unit ${state.unit}`]);
+  Object.keys(UNITS).forEach(key => { if (state[key]) pills.push([key, `${UNITS[key].short} Unit ${state[key]}`]); });
   if (state.term) pills.push(['term', (state.terms === 'ap' ? 'AP term: ' : 'Term: ') + state.term]);
   if (state.from || state.to) pills.push(['date', `${state.from ? fmtDate(state.from) : '…'} – ${state.to ? fmtDate(state.to) : '…'}`]);
   $('#active').innerHTML = (pills.length || ekCount())
@@ -425,7 +442,7 @@ function render(){
 function writeHash(push){
   const p = new URLSearchParams();
   if (view === 'results') p.set('view', 'results');
-  ['q','cat','unit','term','from','to'].forEach(k => state[k] && p.set(k, state[k]));
+  ['q','cat','unit','nunit','term','from','to'].forEach(k => state[k] && p.set(k, state[k]));
   if (state.terms === 'ap') p.set('terms', 'ap');
   ['cyber','net'].forEach(k => state[k].length && p.set(k, state[k].join(',')));
   if (ekCount() > 1 && state.match === 'all') p.set('match', 'all');
@@ -437,8 +454,8 @@ function writeHash(push){
 }
 function readHash(){
   const p = new URLSearchParams(location.hash.slice(1));
-  ['q','cat','unit','term','from','to','sort'].forEach(k => { if (p.get(k)) state[k] = p.get(k); });
-  if (state.unit && !UNITS[state.unit]) state.unit = '';
+  ['q','cat','unit','nunit','term','from','to','sort'].forEach(k => { if (p.get(k)) state[k] = p.get(k); });
+  Object.keys(UNITS).forEach(key => { if (state[key] && !UNITS[key].names[state[key]]) state[key] = ''; });
   ['cyber','net'].forEach(k => { if (p.get(k)) { state[k] = p.get(k).split(',').map(x => x.trim()).filter(Boolean).sort(ekCmp); lastEk[k] = state[k][state[k].length - 1]; } });
   state.match = p.get('match') === 'all' ? 'all' : 'any';
   state.terms = p.get('terms') === 'ap' ? 'ap' : 'all';
@@ -486,7 +503,7 @@ document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click'
   document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
 }));
 document.querySelectorAll('.useg button').forEach(b => b.addEventListener('click', () => {
-  state.unit = b.dataset.unit; state.page = 1; syncUnit();
+  state[b.closest('.useg').dataset.key] = b.dataset.unit; state.page = 1; syncUnit();
   if (view === 'results') update();
 }));
 // Search button (and Enter in the search box) opens the results page.
@@ -511,7 +528,7 @@ $('#active').addEventListener('click', e => {
   state.page = 1; buildTermOptions(); syncEk(); update();
 });
 $('#reset').addEventListener('click', () => {
-  Object.assign(state, { q:'', cat:'', unit:'', term:'', terms:'all', from:'', to:'', sort:'new', cyber:[], net:[], match:'any', page:1 });
+  Object.assign(state, { q:'', cat:'', unit:'', nunit:'', term:'', terms:'all', from:'', to:'', sort:'new', cyber:[], net:[], match:'any', page:1 });
   lastEk = { cyber:'', net:'' };
   $('#findCyber').value = ''; $('#findNet').value = '';
   buildTermOptions(); syncEk();
