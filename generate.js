@@ -60,7 +60,8 @@ function slugify(c, used) {
 }
 
 /* ---------- analytics ---------- */
-const gaId = String(cfg.googleAnalytics || '').trim();
+// Google Analytics tag ID. Falls back to the site's own ID if config.json does not set one.
+const gaId = String(cfg.googleAnalytics || 'G-G732QEYR9M').trim();
 const gaHead = /^G-[A-Z0-9]+$/.test(gaId)
   ? `<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=${gaId}"></script>
@@ -172,7 +173,8 @@ function buildIndex(cases, pages) {
   picks.sort((a, b) => b.date.localeCompare(a.date) || a._i - b._i);
   const featured = picks.slice(0, 3).map(featuredCard).join('') || '<div class="empty">No case studies yet.</div>';
   let s = read('src/index.html');
-  s = s.replace('__HEAD__', gaHead + headMeta({ title: 'The Cyber Casebook', desc, url: '' }) + '\n' + adHead + `<script type="application/ld+json">${json(site)}</script>`)
+  s = s.replace('__GA__', () => gaHead);
+  s = s.replace('__HEAD__', headMeta({ title: 'The Cyber Casebook', desc, url: '' }) + '\n' + adHead + `<script type="application/ld+json">${json(site)}</script>`)
     .replace('__FEATURED__', () => featured)
     .replace('<!--AD:home-->', () => adUnit('home'))
     .replace('<!--AD:results-->', () => adUnit('results', true))

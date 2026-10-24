@@ -11,7 +11,7 @@ module.exports = function buildSchool({ ROOT, OUT, cfg, cases, EKMAP, json }) {
   const rep = (a, b) => { if (!s.includes(a)) throw new Error('school build: missing ' + a); s = s.replace(a, () => b); };
   rep('<link rel="stylesheet" href="assets/site.css">', `<style>\n${css}\n.school-foot{text-align:center;color:var(--faint);font:12px var(--mono);padding:28px 0 36px}\n</style>`);
   rep('<script src="assets/rain.js"></script>', `<script>\n${rain}\n</script>`);
-  rep('__HEAD__', '');
+  rep('__GA__', ''); rep('__HEAD__', '');
   rep('__FEATURED__', '<div class="empty">Loading case studies…</div>');
   rep('<!--AD:home-->', ''); rep('<!--AD:results-->', '');
   rep('__FOOTER__', '<footer class="school-foot">The Cyber Casebook · Real-world case studies for grades 9–12 · New cases every school day</footer>');
