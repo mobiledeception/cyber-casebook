@@ -3,6 +3,8 @@
   const root = document.documentElement;
   const set = light => {
     if (light) root.dataset.theme = 'light'; else delete root.dataset.theme;
+    const keep = document.querySelector('.banner-keep'), banner = document.getElementById('banner');
+    if (light && keep && banner && !keep.getAttribute('src')) keep.src = banner.currentSrc || banner.src;
     document.querySelectorAll('[data-theme-toggle]').forEach(b => {
       b.textContent = light ? 'Dark mode' : 'Light mode';
       b.setAttribute('aria-pressed', String(light));
