@@ -40,3 +40,17 @@
   let last = 0;
   (function loop(t){ if (t - last > 55 && document.documentElement.dataset.theme !== 'light') { frame(); last = t; } requestAnimationFrame(loop); })(0);
 })();
+
+/* Keep each page title on one line: shrink its font just enough to fit the column. */
+(function () {
+  function fit() {
+    document.querySelectorAll('.page h1').forEach(function (h) {
+      h.style.fontSize = '';
+      var w = h.clientWidth, s = h.scrollWidth;
+      if (w && s > w) h.style.fontSize = Math.max(12, Math.floor(parseFloat(getComputedStyle(h).fontSize) * w / s * 10) / 10) + 'px';
+    });
+  }
+  var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(fit, 80); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  fit();
+})();

@@ -198,7 +198,7 @@ footer nav a{color:var(--muted);text-decoration:none;text-transform:uppercase;le
 footer nav a:hover{color:var(--green)}
 footer p{margin:6px auto 0;max-width:820px}
 /* subpages (case pages, archive, about, privacy) */
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 0 14px;border-bottom:1px solid var(--line)}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 0 10.5px;border-bottom:1px solid var(--line)}
 .brand{display:flex;align-items:center;gap:10px;color:var(--green);text-decoration:none;font:400 22px/1 var(--display);letter-spacing:.04em;text-shadow:var(--glow);white-space:nowrap}
 .brand small{color:var(--faint);font:500 11px/1 var(--mono);letter-spacing:.1em;text-shadow:none}
 .topbar nav{display:flex;gap:4px;white-space:nowrap}
@@ -208,7 +208,7 @@ footer p{margin:6px auto 0;max-width:820px}
 .crumbs{margin:16px 0 0;font-size:12px;color:var(--faint)}
 .crumbs a{color:var(--muted);text-decoration:none}.crumbs a:hover{color:var(--green)}
 .page{margin-top:16px}
-.page h1{font-size:34px;line-height:1.15;color:var(--green);text-shadow:var(--glow);margin:10px 0 10px}
+.page h1{font-size:34px;line-height:1.15;white-space:nowrap;color:var(--green);text-shadow:var(--glow);margin:10px 0 10px}
 .page .fcard.ai h1{color:var(--cyan);text-shadow:0 0 12px rgba(92,242,255,.4)}
 .page h2{font-size:21px;color:var(--green);margin:0 0 10px}
 .block{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;margin-top:18px}
@@ -243,9 +243,9 @@ footer p{margin:6px auto 0;max-width:820px}
   .page h1{font-size:27px}
   .arch li{grid-template-columns:1fr;gap:2px}
   .brand{font-size:18px}.brand small{display:none}
-  .topbar{flex-wrap:wrap;gap:8px;padding:16px 0 10px}
-  .topbar nav{width:100%;margin-left:-4px;flex-wrap:wrap;white-space:normal;row-gap:0}
-  .topbar nav a{padding:4px 6px 4px 4px;font-size:11px;letter-spacing:.04em}
+  .topbar{flex-wrap:wrap;gap:6px;padding:12px 0 7.5px}
+  .topbar nav{width:100%;margin-left:0;flex-wrap:nowrap;white-space:nowrap;gap:0;justify-content:space-between;font-size:min(11px,calc((100vw - 52px) / 30))}
+  .topbar nav a,.topbar nav .theme-toggle{padding:3px 2px;font-size:inherit;letter-spacing:.02em}
 }
 
 /* Networking category accent (amber) */
@@ -367,4 +367,19 @@ input[type=date]::-webkit-date-and-time-value{text-align:left;margin:0}
   .tg-side{position:static;order:-1}
   .tg-filters{grid-template-columns:repeat(2,minmax(0,1fr))}
   .tg-preview{padding:22px 18px}
+}
+
+/* Sub-page menu: one row on phones, compact prompt marker */
+@media (max-width:560px){.topbar nav a::before,.topbar .theme-toggle::before{content:">";margin-right:.3em}}
+@media (max-width:700px){.topbar .theme-toggle{font-size:inherit;padding:3px 2px}}
+/* Home menu: 25% less space above and below */
+header.top .nav{margin-top:7px}
+header.top{padding-bottom:3px}
+main#home > #latest.sec{margin-top:9px}
+/* Sub-page header between phone and desktop widths: drop the tagline, then put the menu on its own single row */
+@media (max-width:1100px){.brand small{display:none}}
+@media (max-width:860px){
+  .topbar{flex-wrap:wrap;gap:6px;padding:12px 0 7.5px}
+  .topbar nav{width:100%;margin-left:0;flex-wrap:nowrap;white-space:nowrap;gap:0;justify-content:space-between;font-size:min(11px,calc((100vw - 52px) / 30))}
+  .topbar nav a,.topbar nav .theme-toggle{padding:3px 2px;font-size:inherit;letter-spacing:.02em}
 }
