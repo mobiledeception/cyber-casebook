@@ -6,7 +6,7 @@
  *
  * Reads config.json, pulls the latest case studies from the Apps Script feed
  * ("dataUrl"), and writes the finished website into dist/:
- *   index.html, archive.html, about.html, privacy.html, 404.html,
+ *   index.html, archive.html, about.html, test-generator.html (+ data/questions.json), privacy.html, 404.html,
  *   case/<one page per case study>.html, sitemap.xml, robots.txt, ads.txt
  * If the feed can't be reached it uses data/snapshot.json instead.
  * Needs Node 18 or newer. No packages to install.
@@ -107,7 +107,7 @@ function headMeta({ title, desc, url, type = 'website' }) {
 }
 function footer(pre) {
   return `<footer>
-    <nav aria-label="Site"><a href="${pre}index.html">Home</a><a href="${pre}archive.html">All case studies</a><a href="${pre}about.html">About</a><a href="${pre}privacy.html">Privacy</a></nav>
+    <nav aria-label="Site"><a href="${pre}index.html">Home</a><a href="${pre}archive.html">All case studies</a><a href="${pre}test-generator.html">Test generator</a><a href="${pre}about.html">About</a><a href="${pre}privacy.html">Privacy</a></nav>
     <p><b>The Cyber Casebook</b> · Case studies are written for grades 9-12 from reputable news reports. Always read the original source. EK statements are paraphrased from the AP Cybersecurity and AP Networking course frameworks.</p>
     <p>AP® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this site.</p>
   </footer>`;
@@ -130,7 +130,7 @@ ${adHead}${jsonld ? `<script type="application/ld+json">${json(jsonld)}</script>
 <div class="wrap">
   <header class="topbar">
     <a class="brand" href="${pre}index.html">&gt;_ The Cyber Casebook <small>// AP CYBER · AP NETWORKING · AI</small></a>
-    <nav aria-label="Site"><a href="${pre}index.html">Home</a><a href="${pre}archive.html">All cases</a><a href="${pre}about.html">About</a><button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false">Light mode</button></nav>
+    <nav aria-label="Site"><a href="${pre}index.html">Home</a><a href="${pre}archive.html">All cases</a><a href="${pre}test-generator.html">Test generator</a><a href="${pre}about.html">About</a><button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false">Light mode</button></nav>
   </header>
 ${body}
   ${footer(pre)}
@@ -356,6 +356,67 @@ function build404() {
   return shell({ title: 'Not found · The Cyber Casebook', desc: 'Page not found.', url: '404.html', pre: '/', body });
 }
 
+function buildTestGen() {
+  const opt = (v, t) => `<option value="${esc(v)}">${esc(t)}</option>`;
+  const body = `
+  <main class="page tg" id="tg" data-feed="${esc(String(cfg.dataUrl || ''))}">
+    <h1>Multiple-choice test generator</h1>
+    <p class="tg-lede">Choose questions written from real Cyber Casebook case studies, aligned to AP Cybersecurity and AP Networking essential knowledge. Preview your test, then download it as a Word file with the answer key on the last page. Nothing you build is saved on this site.</p>
+    <div class="tg-grid">
+      <section class="tg-browse" aria-labelledby="tg-b">
+        <h2 id="tg-b">Find questions</h2>
+        <div class="tg-filters">
+          <label>Subject<select id="tgSubject">${opt('', 'All subjects')}${opt('AP Cybersecurity', 'AP Cybersecurity')}${opt('AP Networking', 'AP Networking')}</select></label>
+          <label>Unit<select id="tgUnit" disabled>${opt('', 'All units')}</select></label>
+          <label>Essential knowledge<select id="tgEk">${opt('', 'All EKs')}</select></label>
+          <label>Difficulty<select id="tgDiff">${opt('', 'Any')}${opt('Easy', 'Easy')}${opt('Medium', 'Medium')}${opt('Hard', 'Hard')}</select></label>
+          <label class="wide">Search<input id="tgSearch" type="search" placeholder="Keyword, EK, or case headline"></label>
+        </div>
+        <p class="tg-count"><span id="tgCount"></span> <span id="tgStatus" role="status">Loading questions...</span></p>
+        <div id="tgList" class="tg-list"></div>
+        <button type="button" class="btn" id="tgMore" hidden>Show more</button>
+      </section>
+      <aside class="tg-side" aria-labelledby="tg-s">
+        <h2 id="tg-s">Your test (<span id="tgSelCount">0</span>)</h2>
+        <label class="tg-title">Test title<input id="tgTitle" type="text" maxlength="80" placeholder="Cyber Casebook Quiz"></label>
+        <ol id="tgSelList" class="tg-sel"></ol>
+        <label class="chk"><input type="checkbox" id="tgShufQ"> Shuffle question order</label>
+        <label class="chk"><input type="checkbox" id="tgShufC"> Shuffle answer choices</label>
+        <div class="tg-actions">
+          <button type="button" class="btn" id="tgPrevBtn" disabled>Preview</button>
+          <button type="button" class="btn primary" id="tgWordBtn" disabled>Download Word</button>
+          <button type="button" class="btn" id="tgClear" disabled>Clear</button>
+        </div>
+        <p id="tgMsg" class="tg-msg" role="status"></p>
+        <p class="tg-help">Tip: to use the test in Google Drive, upload the Word file and choose Open with &gt; Google Docs.</p>
+      </aside>
+    </div>
+    <section id="tgPreview" class="tg-preview" hidden aria-label="Test preview"></section>
+  </main>
+  <script src="assets/testgen.js" defer></script>`;
+  return shell({ title: 'Multiple-Choice Test Generator · The Cyber Casebook', desc: 'Build a multiple-choice test from AP Cybersecurity and AP Networking questions based on real case studies, then download it as a Word file with an answer key.', url: 'test-generator.html', pre: '', body });
+}
+
+async function loadQuestions() {
+  const url = String(cfg.dataUrl || '').trim();
+  if (!url) return { questions: [] };
+  try {
+    const r = await fetch(url + (url.includes('?') ? '&' : '?') + 'view=questions', { redirect: 'follow', signal: AbortSignal.timeout(45000) });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const d = await r.json();
+    if (!Array.isArray(d.questions)) throw new Error('no questions');
+    // Public fields only; the feed never includes answers, and this drops anything unexpected.
+    const qs = d.questions.map(q => ({ id: q.id, subject: q.subject, unit: q.unit, unitName: q.unitName, ek: q.ek, skill: q.skill,
+      difficulty: q.difficulty, stem: q.stem, choices: (q.choices || []).map(c => ({ id: c.id, text: c.text })), created: q.created,
+      caseDate: q.caseDate, caseHeadline: q.caseHeadline, sourceUrl: q.sourceUrl }));
+    console.log(`Question bank: ${qs.length} active questions.`);
+    return { updated: d.updated, questions: qs };
+  } catch (e) {
+    console.warn('! Could not read the question feed (' + e.message + '). The test generator will load it in the browser.');
+    return { questions: [] };
+  }
+}
+
 /* ---------- data ---------- */
 async function loadCases() {
   const url = String(cfg.dataUrl || '').trim();
@@ -416,13 +477,16 @@ function copyDir(from, to) {
   }
   write('archive.html', buildArchive(cases));
   write('about.html', buildAbout(cases.length));
+  write('test-generator.html', buildTestGen());
+  fs.mkdirSync(path.join(OUT, 'data'), { recursive: true });
+  write('data/questions.json', JSON.stringify(await loadQuestions()));
   write('privacy.html', buildPrivacy());
   write('404.html', build404());
   cases.forEach(c => write(c.page, buildCase(c, cases)));
 
   if (SITE) {
     const today = new Date().toISOString().slice(0, 10);
-    const urls = [['', cases[0]?.date || today], ['archive.html', cases[0]?.date || today], ['about.html', today], ['privacy.html', '2026-10-01'],
+    const urls = [['', cases[0]?.date || today], ['archive.html', cases[0]?.date || today], ['about.html', today], ['test-generator.html', today], ['privacy.html', '2026-10-01'],
       ...cases.map(c => [c.page, c.date])];
     write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
       urls.map(([u, d]) => `  <url><loc>${esc(abs(u))}</loc><lastmod>${esc(d)}</lastmod></url>`).join('\n') + '\n</urlset>\n');

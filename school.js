@@ -35,6 +35,7 @@ async function load(){
   let data = await gasData();
   if (data && Array.isArray(data.cases)) { CASES = normalize(data.cases); applyAssets(data.assets); finishLoad(); return; }`);
   rep('  CASES.sort((a,b) => b.date.localeCompare(a.date) || a._i - b._i);\n  const openResults', '  finishLoad();\n}\nfunction finishLoad(){\n  CASES.sort((a,b) => b.date.localeCompare(a.date) || a._i - b._i);\n  const openResults');
+  rep('<a href="test-generator.html">Test generator</a>', '');   // main site only
   // every remaining link opens in a new tab (the page runs inside a frame)
   s = s.replace(/<a href="https?:/g, '<a target="_blank" rel="noopener" href="https:');
   const left = s.match(/__[A-Z_]+__/); if (left) throw new Error('school build placeholder: ' + left[0]);
