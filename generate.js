@@ -106,9 +106,11 @@ function headMeta({ title, desc, url, type = 'website' }) {
     `<link rel="icon" href="data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="8" fill="#000"/><text x="32" y="44" font-family="monospace" font-size="34" font-weight="700" text-anchor="middle" fill="#00FF66">&gt;_</text></svg>')}">`
   ].filter(Boolean).join('\n');
 }
+// Link to the home page as "/" (not index.html) so search engines see one home URL.
+const home = pre => pre || './';
 function footer(pre) {
   return `<footer>
-    <nav aria-label="Site"><a href="${pre}index.html">Home</a><a href="${pre}archive.html">All case studies</a><a href="${pre}test-generator.html">Test generator</a><a href="${pre}about.html">About</a><a href="${pre}privacy.html">Privacy</a></nav>
+    <nav aria-label="Site"><a href="${home(pre)}">Home</a><a href="${pre}archive.html">All case studies</a><a href="${pre}test-generator.html">Test generator</a><a href="${pre}about.html">About</a><a href="${pre}privacy.html">Privacy</a></nav>
     <p><b>The Cyber Casebook</b> · Case studies are written for grades 9-12 from reputable news reports. Always read the original source. EK statements are paraphrased from the AP Cybersecurity and AP Networking course frameworks.</p>
     <p>AP® is a trademark registered by the College Board, which is not affiliated with, and does not endorse, this site.</p>
   </footer>`;
@@ -130,8 +132,8 @@ ${adHead}${jsonld ? `<script type="application/ld+json">${json(jsonld)}</script>
 <canvas id="rain" aria-hidden="true"></canvas>
 <div class="wrap">
   <header class="topbar">
-    <a class="brand" href="${pre}index.html">&gt;_ The Cyber Casebook <small>// AP CYBER · AP NETWORKING · AI</small></a>
-    <nav aria-label="Site"><a href="${pre}index.html">Home</a><a href="${pre}archive.html">All cases</a><a href="${pre}test-generator.html">Test generator</a><a href="${pre}about.html">About</a><button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false">Light mode</button></nav>
+    <a class="brand" href="${home(pre)}">&gt;_ The Cyber Casebook <small>// AP CYBER · AP NETWORKING · AI</small></a>
+    <nav aria-label="Site"><a href="${home(pre)}">Home</a><a href="${pre}archive.html">All cases</a><a href="${pre}test-generator.html">Test generator</a><a href="${pre}about.html">About</a><button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false">Light mode</button></nav>
   </header>
 ${body}
   ${footer(pre)}
@@ -194,7 +196,7 @@ function ekBlock(course, ids, name) {
   <section class="block ${course === 'net' ? 'net' : ''}">
     <h2>${name} alignment</h2>
     <ul class="eks">${[...ids].sort(ekCmp).map(id => `
-      <li><a class="ek ${course}" href="../index.html#view=results&amp;${course}=${encodeURIComponent(id)}" title="See every case study that uses ${esc(id)}">${esc(id)}</a>${esc(statement(course, id) || 'Statement not found in the framework reference.')}${loTitle(course, id) ? `<span class="lo">Learning objective: ${esc(loTitle(course, id))}</span>` : ''}</li>`).join('')}
+      <li><a class="ek ${course}" href="../#view=results&amp;${course}=${encodeURIComponent(id)}" title="See every case study that uses ${esc(id)}">${esc(id)}</a>${esc(statement(course, id) || 'Statement not found in the framework reference.')}${loTitle(course, id) ? `<span class="lo">Learning objective: ${esc(loTitle(course, id))}</span>` : ''}</li>`).join('')}
     </ul>
   </section>`;
 }
@@ -227,7 +229,7 @@ function buildCase(c, cases) {
     image: SITE ? abs('img/banner.jpg') : undefined
   };
   const body = `
-  <div class="crumbs"><a href="../index.html">Home</a> / <a href="../archive.html">All case studies</a> / ${esc(c.headline)}</div>
+  <div class="crumbs"><a href="../">Home</a> / <a href="../archive.html">All case studies</a> / ${esc(c.headline)}</div>
   <main class="page">
     <article class="fcard ${catCls(c)}">
       <div class="meta"><span class="badge ${catCls(c)}">${esc(c.category || 'Case')}</span><time datetime="${esc(c.date)}">${esc(fmtDate(c.date))}</time><span>Source outlet: <b style="color:var(--text);font-weight:600">${esc(c.outlet)}</b></span></div>
@@ -353,7 +355,7 @@ function build404() {
   const body = `
   <main class="page prose">
     <h1>404 // Not found</h1>
-    <section class="block"><p>That page isn't in the Casebook. Try the <a href="/index.html">home page</a> or the <a href="/archive.html">full archive</a>.</p></section>
+    <section class="block"><p>That page isn't in the Casebook. Try the <a href="/">home page</a> or the <a href="/archive.html">full archive</a>.</p></section>
   </main>`;
   return shell({ title: 'Not found · The Cyber Casebook', desc: 'Page not found.', url: '404.html', pre: '/', body });
 }
