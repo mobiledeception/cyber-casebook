@@ -3,11 +3,21 @@ name: Deploy Cyber Casebook
 on:
   push:
     branches: ["main"]
+  # Rebuild on a timer so new case studies from the Google Sheet get baked into
+  # the site (home page, case pages, sitemap) without needing a push.
+  schedule:
+    - cron: "23 */3 * * *"   # every 3 hours (UTC)
+  # Adds a "Run workflow" button on the Actions tab for an on-demand rebuild.
+  workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   deploy:
