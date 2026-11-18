@@ -39,12 +39,22 @@
     $('tgStatus').textContent = all.length ? '' : 'No questions are available yet. The bank is still being filled - check back soon.';
     fillSelects(); render(); renderSel();
   }
-  fetch('data/questions.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (d) { if (d && d.questions && d.questions.length) return d; return FEED ? jsonp(FEED + '?view=questions') : d; })
-    .then(start).catch(function () {
-      (FEED ? jsonp(FEED + '?view=questions') : Promise.reject()).then(start)
-        .catch(function () { $('tgStatus').textContent = 'The question bank could not be loaded. Please try again later.'; });
+  /* The live question feed (the Google Sheet) is the first choice, so new questions show up
+     without a site rebuild. The static data/questions.json file is only a backup. */
+  function fromFeed() {
+    if (!FEED) return Promise.reject(new Error('nofeed'));
+    return jsonp(FEED + '?view=questions', 10000).then(function (d) {
+      return d && d.questions && d.questions.length ? d : Promise.reject(new Error('empty'));
     });
+  }
+  function fromFile() {
+    return fetch('data/questions.json', { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(new Error('nofile')); })
+      .then(function (d) { return d && d.questions && d.questions.length ? d : Promise.reject(new Error('empty')); });
+  }
+  fromFeed().catch(fromFile).then(start).catch(function () {
+    $('tgStatus').textContent = 'The question bank could not be loaded. Please try again later.';
+  });
 
   /* ---------- filters ---------- */
   function val(id) { return $(id).value; }
